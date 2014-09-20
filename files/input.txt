@@ -1,0 +1,4040 @@
+# 1 "input.c"
+# 1 "<command-line>"
+# 1 "input.c"
+# 159 "input.c"
+volatile unsigned int GNCDataflg1;
+volatile unsigned int TeleMode;
+//  zhushi sjdfl
+typedef union
+{
+    unsigned int Word; /*kjfjdsfjsjd*/
+    float Float;
+    struct
+    {
+        unsigned High : 16;
+        unsigned Low : 16;
+    } Half;
+
+    struct
+    {
+        unsigned High_h :8;
+        unsigned High_l :8;
+        unsigned Low_h :8;
+        unsigned Low_l :8;
+    } Byte;
+
+    struct
+    {
+        unsigned BZ1 : 4;
+        unsigned BZ2 : 4;
+        unsigned BZ3 : 4;
+        unsigned BZ4 : 4;
+
+        unsigned BZ5 : 4;
+        unsigned BZ6 : 4;
+        unsigned BZ7 : 4;
+        unsigned BZ8 : 4;
+    } Bit4;
+}USED_WORD;
+
+
+
+typedef union
+{
+    volatile unsigned int Word;
+
+    struct
+    {
+        volatile unsigned High : 16;
+        volatile unsigned GNC : 5;
+        volatile unsigned tr : 1;
+        volatile unsigned Address : 5;
+        volatile unsigned Number : 5;
+    } Bit;
+}RCV_COMMAND;
+
+
+typedef struct
+{
+    float DG[24];
+    float DGOld[24];
+    float DGn[6];
+    float DGT[3];
+    float DGT0[3];
+    float DGT1[3];
+    float DGT2[3];
+    float DGT3[3];
+    float DGT4[3];
+    float xw[3];
+    float xwTI[3];
+    float xwBT[3];
+    int GC[6];
+    float InparaGyro[6];
+    float InparaAM[12];
+    float bn[6];
+    float DGnOld[6];
+    float NormW;
+}GYRODATA;
+GYRODATA GyroData;
+
+
+typedef struct
+{
+    float bn[6];
+    float b[3];
+    float Inias0[6];
+    float as[6];
+    float Ei[6][3];
+    float aI[3];
+    float aB[3];
+    int AC[6];
+
+    float mas0;
+    float As0Max;
+    float Inas0[6];
+
+    float as0[6];
+    float asOld[6];
+    float Initas0[6];
+}ACCELERATE;
+ACCELERATE Acce;
+
+
+typedef struct
+ {
+ unsigned int DSSFlg[2];
+ unsigned int ASSFlg[2];
+    float ASSA[2];
+    float DSSA[2];
+ float OldDSSA[2];
+ float OldASSA[2];
+ float CBDS[3][3];
+ float CBAS[3][3];
+    float Sb[3];
+    float SI[3];
+}SSDATA;
+SSDATA SSData;
+
+
+typedef struct
+{
+ float XI[3];
+    float YI[3];
+    float ZI[3];
+    float XB[3];
+    float YB[3];
+    float ZB[3];
+    float XB0[3];
+    float YB0[3];
+    float ZB0[3];
+    float KS[6][3];
+    float Kst2[6][3];
+    double Time;
+    unsigned int Status;
+    float q[4];
+    unsigned int DataFlg;
+    float DeltaXB[3];
+    float DeltaYB[3];
+    float DeltaZB[3];
+    float DeltaX[3];
+    float DeltaY[3];
+    float DeltaZ[3];
+    float DeltaZR[3];
+    float numSTS;
+    unsigned int STSflg;
+    unsigned int CorrectMS;
+    unsigned int CorrectS;
+    unsigned int qTele[9];
+    float AR[3];
+    unsigned int HK1_Status1;
+    unsigned int HK1_Status2;
+    unsigned int HK1_Status3;
+    unsigned int HK1_Status4;
+    unsigned int HK1_Status5;
+    unsigned int HK1_Status6;
+    unsigned int DoubErrStatus;
+    unsigned int DouErrAdr;
+    unsigned int tmpValveFlg;
+    unsigned int tmpNumValve;
+    unsigned int FreQuenceHK1;
+    float DeltaZm;
+    unsigned int SeuqenceFlg;
+    unsigned int GetSTSDataFlg;
+}SINGLE_STS;
+SINGLE_STS STSA,STSB,STSC;
+
+
+typedef struct
+{
+    unsigned int CMFlag;
+    unsigned int FlgPoint;
+ float LandPoint[3];
+    unsigned int SafeRadius;
+    unsigned int SafeValve;
+    double Time;
+    double CorrectTime;
+}CCDDATA;
+CCDDATA CCD;
+
+
+typedef struct
+{
+    double Time;
+    float q[4];
+ float rI[3];
+}RECORDCCD;
+RECORDCCD RecordCCD[13];
+
+
+typedef struct
+{
+    unsigned int LIFlag;
+    unsigned int FlgPoint;
+ float LandPoint[3];
+    unsigned int SafeRadius;
+    unsigned int SafeValve;
+    unsigned int MemData[44];
+}TDIDATA;
+TDIDATA TDI;
+
+
+
+typedef struct
+{
+    double Time;
+    float q[4];
+ float rI[3];
+}RECORDTDI;
+RECORDTDI RecordTDI;
+
+
+typedef struct
+{
+ unsigned int DataValid[2];
+    unsigned int TimeOverFlg;
+    unsigned int Channel;
+    double AxisTime[2];
+ float XI;
+    float ZI;
+
+    float dZI;
+ float dXI;
+
+ float qHC;
+ float wHC;
+
+ float Wh1[2];
+ float Hh1[2];
+
+ float URBZ[3];
+ float URBX[3];
+ float numLRF;
+    unsigned int CorrectMS;
+    unsigned int CorrectS;
+    unsigned int TmpFlg[2];
+    unsigned int tmpValveFlg;
+    unsigned int tmpNumValve;
+    float dquRLX;
+    float dquRLZ;
+    float Ml_t;
+}LRFDATA;
+LRFDATA LRF;
+
+
+typedef struct
+{
+ double Time;
+    unsigned int DataFlg[3];
+    float Rate[3];
+    unsigned int RVSMode;
+    unsigned int V5Flg;
+    unsigned int R4Flg;
+    unsigned int R5Flg;
+ double R4R5Time;
+
+ float HRmax;
+ float HRmin;
+ float HVmax;
+ float HVmin;
+ float HVmax5;
+    float cosa;
+
+ float qHC;
+ float wHC;
+
+ float qVC1;
+ float qVC2;
+ float wVC1;
+ float wVC2;
+
+
+ float Wh2[2];
+ float Hh2[2];
+ float Wv1;
+ float Vv1;
+ float Wv2;
+ float Vv2;
+ float Wv3;
+ float Vv3;
+ float Wv5;
+ float Vv5;
+
+ float URB4[3];
+ float URB5[3];
+ float UVB1[3];
+ float UVB2[3];
+ float UVB3[3];
+ float UVB5[3];
+ float UVB6[3];
+ float RmR4;
+ float RmR5;
+ float VmR5;
+ float numRVS;
+ unsigned int RVSflg;
+    unsigned int RVSflg1;
+    unsigned int RVSflg2;
+    unsigned int CorrectMS;
+    unsigned int CorrectS;
+    unsigned int TmpFlg[2];
+
+ float dRmR4;
+ float dRmR5;
+ float dVmR5;
+ float dRate1[3];
+ float dRate2[3];
+
+ float dquRR4;
+ float dquRR5;
+ float dquVR1;
+ float dquVR2;
+ float dquVR3;
+ float dquVR5;
+
+ unsigned int DmcateRVSFlg1;
+ unsigned int DmcateRVSFlg2;
+ unsigned int NumDmcateRVS1;
+ unsigned int NumDmcateRVS2;
+ unsigned int NumDmcateRVS;
+ float Mm_t;
+ unsigned int Chn;
+ unsigned int Cmd[55];
+
+}RVSDATA;
+RVSDATA RVS;
+
+
+typedef struct
+ {
+    float FCBK;
+ unsigned int FStep;
+    float fFC;
+ float fdFC;
+ float aIC[3];
+ float Isp7500;
+ float Isp1;
+ float Isp2;
+ float Isp3;
+ float c1;
+ float c2;
+ float c3;
+
+ float Tdy7500;
+ float Tdy150;
+ float dFps;
+
+ float dFup;
+}THRUSTOR;
+THRUSTOR Thrustor;
+
+
+typedef struct
+ {
+ float Lcy;
+ float dLcy;
+ float Lcz;
+ float dLcz;
+ float Lc[3];
+
+ float K;
+ float Ld;
+ float H;
+ float LHm;
+ float dLHm;
+
+ float tony;
+ float tonz;
+ float Lcy0;
+ float Lcz0;
+ float rICH[3];
+ float vBIH[3];
+ float aIH[3];
+ float aICH[3];
+ float aICR[3];
+ float d1;
+ float d2;
+ float d3;
+}HORIZON;
+HORIZON horizon;
+
+
+typedef struct
+{
+ unsigned int T;
+ unsigned int MS;
+ unsigned int S;
+ volatile unsigned int MSInt;
+ volatile unsigned int SInt;
+ volatile unsigned int GPT_OldInt;
+ unsigned int tec1;
+    float Tec2;
+    float Tec3;
+    unsigned int deltaMS;
+    unsigned int ReCounter;
+    double ReTimeorbit;
+    double Orbit;
+} TIME;
+TIME Time;
+
+
+typedef struct
+ {
+
+    unsigned int GyroAM[121];
+    unsigned int OldGyroAM[24];
+    unsigned int OldGyro[12];
+    int GyroAMTele[30];
+    unsigned int TeleDataIMU1[25];
+    unsigned int TeleDataIMU2[25];
+    unsigned int STSCmd[76];
+    unsigned int STS1[130];
+    unsigned int STS2[130];
+    unsigned int STS3[130];
+    unsigned int SS[7];
+ unsigned int CCDCmd[120];
+ unsigned int CCDPoint[21];
+ unsigned int TDICmd[28];
+ unsigned int TDIPoint[19];
+ unsigned int TDITele[24];
+ unsigned int LTUDataLRF[13];
+ unsigned int TeleLRF[24];
+ unsigned int LTUDataRVS[18];
+ unsigned int CmdJet[6];
+ unsigned int RecJet[3];
+ unsigned int DmcateRVS1[6600];
+ unsigned int DmcateRVS2[6600];
+}LTUDATA;
+LTUDATA LTUData;
+
+
+
+typedef struct
+ {
+ unsigned int Num;
+ unsigned int GyroAM1[3];
+ unsigned int GyroAM2[3];
+ unsigned int LTUCheckTDI[2];
+ unsigned int GEB1[3];
+ unsigned int GEB2[3];
+ unsigned int RVS1[20];
+ unsigned int RVS2[20];
+ unsigned int Jet1[4];
+ unsigned int Jet2[4];
+ unsigned int OldJet1[4];
+ unsigned int OldJet2[4];
+ unsigned int LTUCheckLRF[28];
+}LTUSelfCheck;
+LTUSelfCheck LTUCheck;
+
+
+
+typedef struct
+ {
+    unsigned int GEB1;
+    unsigned int GEB2;
+    unsigned int GyroAM1;
+    unsigned int GyroAM2;
+    unsigned int RVS1;
+    unsigned int RVS2;
+    unsigned int LTUErrorNumSTSA;
+    unsigned int LTUErrorNumSTSB;
+    unsigned int LTUErrorNumSTSC;
+    unsigned int LTUErrorNumLRF;
+    unsigned int Jet1;
+    unsigned int Jet2;
+    unsigned int LTUErrorNumTDI;
+
+    unsigned int OldGEB1;
+    unsigned int OldGEB2;
+    unsigned int OldGyroAM1;
+    unsigned int OldGyroAM2;
+    unsigned int OldRVS1;
+    unsigned int OldRVS2;
+    unsigned int OldSTSA;
+    unsigned int OldSTSB;
+    unsigned int OldSTSC;
+    unsigned int OldLRF;
+    unsigned int OldJET1;
+    unsigned int OldJET2;
+    unsigned int OldTDI;
+
+    unsigned int ValveGEB1;
+    unsigned int ValveGEB2;
+    unsigned int ValveGyroAM1;
+    unsigned int ValveGyroAM2;
+    unsigned int ValveRVS1;
+    unsigned int ValveRVS2;
+    unsigned int ValveSTSA;
+    unsigned int ValveSTSB;
+    unsigned int ValveSTSC;
+    unsigned int ValveLRF;
+    unsigned int ValveJET1;
+    unsigned int ValveJET2;
+    unsigned int ValveTDI;
+
+    unsigned int FlgGEB1;
+    unsigned int FlgGEB2;
+    unsigned int FlgGyroAM1;
+    unsigned int FlgGyroAM2;
+    unsigned int FlgRVS1;
+    unsigned int FlgRVS2;
+    unsigned int FlgSTSA;
+    unsigned int FlgSTSB;
+    unsigned int FlgSTSC;
+    unsigned int FlgLRF;
+    unsigned int FlgJET1;
+    unsigned int FlgJET2;
+    unsigned int FlgTDI;
+
+    unsigned int IdleGyroAM1;
+    unsigned int IdleGyroAM2;
+    unsigned int IdleLRF;
+    unsigned int IdleGEB1;
+    unsigned int IdleGEB2;
+    unsigned int IdleRVS1;
+    unsigned int IdleRVS2;
+    unsigned int IdleSTSA;
+    unsigned int IdleSTSB;
+    unsigned int IdleSTSC;
+    unsigned int Idle;
+
+    unsigned int NumInvalid;
+ unsigned int ValveGyroAM;
+ unsigned int tmpValveGEB1Flg;
+ unsigned int tmpValveGEB1;
+ unsigned int tmpValveGEB2Flg;
+ unsigned int tmpValveGEB2;
+ unsigned int tmpValveRVS1Flg;
+ unsigned int tmpValveRVS1;
+ unsigned int tmpValveRVS2Flg;
+ unsigned int tmpValveRVS2;
+ unsigned int IdleDmcateRVS1;
+ unsigned int IdleDmcateRVS2;
+}LTUError;
+LTUError LTUErrorNum;
+
+
+typedef struct
+ {
+    float Rate[3];
+    float AngleC[3];
+    float RateC[3];
+    float AngleT[3];
+    float RateC0[3];
+    float b[3];
+
+    float Angle[3];
+    float q[4];
+
+    float qg[4];
+    float qGI[4];
+    float qGI0[4];
+    float qTI[4];
+    float qBT[4];
+    float absqBT;
+    float CBM[3][3];
+    float CIB[3][3];
+    float CBI[3][3];
+ float dThetaM;
+ float ThetaM;
+ float dThetaR;
+ float AngleMg[3];
+ float CGI[3][3];
+ float AngleMgR[3];
+}ATTITUDEDATA;
+ATTITUDEDATA Atti;
+
+
+
+typedef struct
+{
+    float DeltaZR[3];
+    float DeltaZpst[3];
+ unsigned int numDeltaZ;
+    unsigned int XMBDFlag;
+    float CalBR[3];
+    float CalCR[3];
+    float BR[3][3];
+    float CR[3][3];
+
+    float InCalBR[3];
+    float InCalCR[3];
+
+    float aSTS;
+    unsigned int STSAFlag;
+    unsigned int STSBFlag;
+    unsigned int STSCFlag;
+    unsigned int ABFlg;
+    unsigned int ACFlg;
+    unsigned int BCFlg;
+ float DeltaZUL;
+ unsigned int Chn;
+ unsigned int Cmd[130];
+ unsigned int CmdLen;
+}STSDATA;
+STSDATA STS;
+
+
+typedef struct
+{
+    float wM;
+    float gI[3];
+    float gIn1[3];
+
+    float rM;
+    float wMI[3];
+
+    float gM;
+}LUNAR;
+LUNAR Lunar;
+
+
+typedef struct
+{
+    float VI[3];
+ float dRIN[3];
+ float dVIN[3];
+    float NormRI;
+    double RIn1[3];
+    float RLI[3];
+    float VBI[3];
+    float dVI[3];
+    float VIn1[3];
+    float aI[3];
+    float NormaI;
+    float dRI[3];
+    float dRI0[3];
+    float RLI0[3];
+ double tLI0;
+ float SunTheta;
+ float VBG[3];
+ double RI[3];
+ float TgoHR;
+ float tanTheta;
+}LANDING;
+LANDING Land;
+
+
+
+typedef struct
+{
+    float VBb[3];
+ float H;
+ float dH;
+}SATELLITE;
+SATELLITE Self;
+
+
+typedef struct
+{
+ float Worbit[3];
+ float Rd[3];
+ float Vd[3];
+
+ float hIF;
+ float vIF[3];
+
+ float Sdownrange;
+ float rGravPast[3];
+ float rBiasPast[3];
+ float Pg;
+ float Aai[3];
+ float Rp[3];
+ float Vp[3];
+ float dVbp;
+ float TgoBK;
+ float Tp;
+ float mt;
+ float rPf[3];
+ float vPf[3];
+
+ float Ch;
+ float Ch1;
+ float Cv;
+ float Cv1;
+
+}BREAKINGOUT;
+BREAKINGOUT BkData;
+
+
+typedef struct
+{
+    float T0p;
+    double T1;
+}PRELANDOUT;
+PRELANDOUT PLandData;
+
+
+typedef struct
+{
+    float wPU1;
+    float wPU2;
+    float Api;
+    float dap;
+ float Tgo1;
+}AJUSTSPEEDOUT;
+AJUSTSPEEDOUT AdjustSpeed;
+
+
+typedef struct
+{
+
+    float RtG[3];
+    float VtG[3];
+    float atG[3];
+ float jtGt;
+ float TgotG;
+ float HCM1;
+ float HCM2;
+ float dThetaCM;
+ unsigned int TCM;
+ float dHA0;
+ float dHA1;
+ float alphaA;
+ float betaA;
+ float ttA;
+    float TgoPQ;
+    float ThetaPQ;
+    float dVQP;
+ float TgoAS;
+ float hIF0;
+ float vIF0[3];
+
+ float Tgo;
+ float TgoPast;
+ float dtp;
+ float Tgo1AS;
+ float VAS[3];
+ float HApp250;
+ unsigned int AppIniFlg;
+ unsigned int ASFlg;
+}APPROACHOUT;
+APPROACHOUT Approach;
+
+
+
+typedef struct
+{
+
+ float Hsus;
+    float ThetaLI;
+    float dThetaLI;
+ float VLI;
+ unsigned int TLI;
+
+
+
+ float hHS;
+ float hslw;
+ float vslw;
+ float tSN1;
+ float tSN2;
+
+
+ float tSH;
+ unsigned int NumSus;
+ unsigned int NumSlow;
+ unsigned int NumDown;
+ float vt;
+ float ht;
+ float at1;
+ float at2;
+}DOWNDATA;
+DOWNDATA Down;
+
+
+
+typedef struct
+{
+    unsigned int BZ2;
+    unsigned int BZ3;
+    unsigned int BZ4;
+    unsigned int BZ5;
+    unsigned int BZ6;
+    unsigned int BZ7;
+    unsigned int BZ8;
+    unsigned int BZ10;
+    unsigned int BZ12;
+    unsigned int BZ13;
+    unsigned int BZ16;
+    unsigned int BZ18;
+    unsigned int BZ19;
+    unsigned int ZT2;
+    unsigned int ZT3;
+    unsigned int ZT4;
+    unsigned int ZT7;
+    unsigned int ZT9;
+    unsigned int ZT11;
+    unsigned int SLSPFlg;
+    unsigned int BK;
+    unsigned int AZFlag;
+ unsigned int SaveData;
+ unsigned int CLoseValve;
+ unsigned int Send7500Close;
+    unsigned int ReceiveTime;
+ unsigned int RequirData;
+ unsigned int SLPFlag;
+ unsigned int AVCFlag;
+ unsigned int CtrlDown;
+ unsigned int STSlist1;
+ unsigned int STSlist2;
+ unsigned int STSlist3;
+ unsigned int RVSlist1;
+ unsigned int RVSlist2;
+ unsigned int RVSChange;
+ unsigned int TouchdownFlg;
+ unsigned int LRFChange;
+ unsigned int LRFlist;
+ unsigned int Close7500;
+ unsigned int RFlag;
+ unsigned int VFlag;
+ unsigned int VFlag5;
+ unsigned int expandBapta;
+ unsigned int RSflg;
+ volatile unsigned int SetFire80;
+ unsigned int FaultFlg1;
+ unsigned int FaultFlg2;
+ unsigned int Gamma;
+ unsigned int PEGChFlg;
+ unsigned int PDMSFlag;
+ unsigned int GKFlag;
+ unsigned int REVUFlag;
+ unsigned int CmuFaultAMGY;
+ unsigned int SGFlg;
+ unsigned int F5000Flg;
+ unsigned int AFFlag[3];
+ unsigned int EGSwitch;
+ unsigned int GEBlist1;
+ unsigned int GEBlist2;
+ unsigned int GEBlist1_B5;
+ unsigned int GEBlist2_B5;
+ unsigned int SwitchGEB2Flg;
+ unsigned int SwitchRVS2Flg;
+ unsigned int SwitchJet2Flg;
+ unsigned int RvsClearMem;
+}FLAG;
+FLAG Flg;
+
+typedef struct
+{
+ unsigned int Smode;
+ unsigned int TCount;
+ unsigned int TSmode;
+ unsigned int Eclipse;
+ float AngleSA[3];
+ float WT[3];
+ unsigned int TSC;
+ float mSC;
+ unsigned int SSNum[4];
+ unsigned int Flag;
+ unsigned int SRFlag;
+}CaptureSSDATA;
+CaptureSSDATA CaptureSun;
+
+
+
+typedef struct
+{
+
+    unsigned int Tgon;
+    unsigned int Thon;
+
+
+    unsigned int Tgi;
+    unsigned int TFireon;
+    float Tprohoff;
+    float TFireoff;
+    float DeltaVs;
+    float wGK[3];
+    float PhiGK1;
+    float Toff;
+    float Tc;
+
+    unsigned int Gmode;
+    unsigned int TGmode;
+    float STSwGK;
+}ORBITCOMMAND;
+ORBITCOMMAND OrbitCmd;
+
+
+typedef struct
+{
+
+    float Aq;
+    float Ab;
+    float Bq;
+    float Bb;
+    float Cq;
+    float Cb;
+    float MsDeltaT;
+    float Wsdb;
+
+    float a12;
+    float a23;
+    float a34;
+    float a13;
+    float a24;
+    float a14;
+
+    float ThetaD;
+    float ThetaB;
+    float ThetaV;
+    float Dtheta;
+    float dThetaS;
+    float dThetaV;
+    float dThetaL;
+    float dThetaLL;
+    float Kj1;
+    float Kj2;
+    float KJP;
+    float KJD;
+
+}MODIFY;
+MODIFY M;
+
+
+typedef struct
+ {
+ unsigned int Branch_10N[3];
+ unsigned int CS_150N_C1C2;
+ unsigned int CS_150N_C3C4;
+ unsigned int CS_150N_D1D2;
+ unsigned int CS_150N_D3D4;
+ unsigned int CS150N_C56D56;
+ unsigned int CS150N_C78D78;
+ float T_C1C2;
+ float T_C3C4;
+ float T_D1D2;
+ float T_D3D4;
+ float T_C56D56;
+ float T_C78D78;
+ float t1min;
+ float t2min;
+ unsigned int Condition_150N_X;
+}JPC_DATA;
+JPC_DATA Jet;
+
+
+
+typedef struct
+{
+    volatile unsigned int Address;
+    volatile unsigned int num;
+}DOWNLOAD;
+DOWNLOAD DownLoad;
+
+
+typedef struct
+{
+    unsigned int FLG;
+    unsigned int Address;
+    unsigned int Cmd;
+    unsigned int OpenRVS[2];
+    unsigned int OpenIMU[2];
+    unsigned int OpenSTS[3];
+    unsigned int OpenLRF;
+    unsigned int OpenGma;
+    unsigned int OpenGEB[2];
+    unsigned int OpenTDI;
+    unsigned int CloseRVS[2];
+    unsigned int CloseIMU[2];
+    unsigned int CloseSTS[3];
+    unsigned int CloseLRF;
+    unsigned int CloseGma;
+    unsigned int CloseGEB[2];
+    unsigned int CloseTDI;
+}SDCOutput;
+SDCOutput SDCOut;
+
+
+
+typedef struct
+ {
+
+    float Kp[3];
+    float Kd[3];
+ float Ki[3];
+ float Kpv[3];
+    float Kiv[3];
+
+    float Ia[3];
+    float Ib[3];
+    float Im;
+
+    float HH11[3];
+    float HH21[3];
+    float HH12[3];
+    float HH22[3];
+    float Tm[3];
+    float T1max[3];
+    float T2max[3];
+
+    float PW1[3];
+    float PW2[3];
+    float PW3[3];
+    float PWI1[3];
+    float PWI2[3];
+    float PWI3[3];
+    float HH1[3];
+    float HH2[3];
+ unsigned int St_of[3];
+ float Kit[3];
+ float Kitt[3];
+ float I[3];
+ float Tj[3];
+    unsigned int St_offm;
+    unsigned int PWMFlag[3];
+    unsigned int AttiXFlag;
+ unsigned int RollFlg;
+ float Txm10;
+ float Txb10;
+ float Tym10;
+ float Tyb10;
+ float Tzm10;
+ float Tzb10;
+ float Tym150p;
+ float Tyb150p;
+ float Tzm150p;
+ float Tzb150p;
+ float Txm150;
+ float Txb150;
+ float Tym150;
+ float Tyb150;
+ float Tzm150;
+ float Tzb150;
+ float Tb10[3];
+ float Tm10[3];
+ float Tb150[3];
+ float Tm150[3];
+ float dMd[3];
+ float Mci[4][3];
+ float M10[3];
+ float M150[3];
+ float Kw;
+}PULSEDATA;
+PULSEDATA Pulse;
+
+
+
+typedef struct
+{
+ unsigned int T_10N[6];
+ float T_10N_Float[6];
+ unsigned int Num_10N[6];
+ unsigned int Num_10N_Old[6];
+ unsigned int T_150N[6];
+ float T_150N_Float[6];
+ unsigned int Num_150N[6];
+}JPC_DATA_SUM;
+JPC_DATA_SUM JetSum;
+
+
+typedef struct
+{
+
+ float mg;
+ float ma;
+ float mqa;
+
+}IN_PARA;
+IN_PARA InPara;
+
+
+typedef struct
+{
+    float TGT;
+    float qUL;
+    float THU;
+    unsigned int GJetULR;
+    unsigned int GJetULP;
+    float AlphaGC;
+    float TOC;
+    unsigned int TJetULR;
+    unsigned int TJetULP;
+    float TXH;
+    float TLW;
+    float TSZ;
+ float PhiAF;
+ float wAF1;
+ float wAF2;
+    unsigned int tAF;
+    float IDF;
+ float tSH1;
+ float tSH2;
+ float tSH3;
+ float DeltTadd;
+} CHANGE;
+CHANGE Changeable;
+
+unsigned int STSFirstDelayNum;
+unsigned int FirstDelayNum;
+unsigned int RecDelayNum;
+unsigned int IntDelayNum;
+unsigned int SendDelayNum;
+unsigned int SendDelayNumFUL;
+
+
+typedef struct {
+
+ float ThetaD;
+ float ThetaB;
+ float ThetaV;
+ float Dtheta;
+ float dThetaS;
+ float dThetaV;
+ float dThetaL;
+ float dThetaLL;
+ float Kj1;
+ float Kj2;
+ float KJP;
+ float KJD;
+
+ float a1;
+ float a2;
+ float Tmax;
+ float Tmin;
+ float aJS;
+
+}PHASE_PARAMETER;
+PHASE_PARAMETER PhaseParam;
+
+
+typedef struct {
+ float ThetaC;
+ float dThetaC;
+}PHASE_IN;
+PHASE_IN PhaseIn;
+
+
+typedef struct {
+ unsigned int Region[3];
+ unsigned int JetFlag[3];
+ float TN[3];
+ float ThetaC_pst[3];
+}PHASE_OUT;
+PHASE_OUT PhaseOut;
+
+
+typedef struct{
+ unsigned int NumAdjustAtti;
+ unsigned int NUMStarDirThu;
+  unsigned int NumOC[3];
+  unsigned int NumXH;
+  unsigned int NumLW;
+  unsigned int NumSZ;
+  unsigned int NumApart;
+  unsigned int NumSZT;
+  unsigned int nPEGNum;
+  int nPEGNum1;
+ unsigned int nINNum;
+ unsigned int AppNum;
+ unsigned int TcmSum;
+ unsigned int TliSum;
+ unsigned int Tnjsum;
+ unsigned int TjsumX;
+ unsigned int TjsumY;
+ unsigned int TjsumZ;
+ unsigned int NumVp1y;
+ unsigned int NumVp2y;
+ unsigned int NumVp3y;
+ unsigned int NumVp5y;
+ unsigned int NumVp1n;
+ unsigned int NumVp2n;
+ unsigned int NumVp3n;
+ unsigned int NumVp5n;
+ unsigned int NumSunAttiSupCrtl[4];
+ unsigned int NumAF[3];
+ unsigned int NumMgmin;
+ unsigned int TAF1;
+ unsigned int TAF2;
+ unsigned int NumSwitchGEB2;
+ unsigned int NumSwitchRVS2;
+}TK_COUNT_DATA;
+TK_COUNT_DATA TkCount;
+
+
+typedef struct{
+ unsigned int T0;
+ float RI0[3];
+ float VI0[3];
+ double T1;
+}GUID_INIT_DATA;
+GUID_INIT_DATA GuidInitData;
+
+USED_WORD ReadSDC;
+USED_WORD TeleData[300];
+unsigned int RecGNCData[150];
+unsigned int Switch_Cmd;
+unsigned int ResetFlag;
+unsigned int PeriodCount;
+unsigned int TMR_Stage;
+unsigned int OS_ERR1;
+unsigned int OS_ERR2;
+USED_WORD TRDATA[16];
+unsigned int WMInitFlg;
+unsigned int FailureFlag;
+unsigned int RecData[255];
+unsigned int RecImpGNC1[16];
+unsigned int RecImpGNC2[16];
+unsigned int RecImpGNC3[16];
+unsigned int RecImpGNC4[16];
+unsigned int ImpGNC1[16];
+unsigned int ImpGNC2[16];
+unsigned int ImpGNC3[16];
+unsigned int ImpGNC4[16];
+unsigned int CmdAddrOLD;
+unsigned int SendTeleMode;
+unsigned int MannerData;
+unsigned int ReceiveImpGNC1Flg;
+unsigned int ReceiveImpGNC2Flg;
+unsigned int ReceiveImpGNC3Flg;
+unsigned int numImpGNCData;
+unsigned int *Task_TmpData;
+float ErrorOBDHTime;
+unsigned int numRequirData;
+unsigned int numInProgram;
+unsigned int GyroDeltaT1;
+unsigned int GyroDeltaT2;
+float MatrixVG[6][3];
+float MatrixVA[6][3];
+unsigned int num80s;
+unsigned int Num256Cyc;
+unsigned int NumLRFlist;
+unsigned int NumSTSlist1;
+unsigned int NumSTSlist2;
+unsigned int NumSTSlist3;
+unsigned int NumRVSChange;
+unsigned int NumRVSlist1;
+unsigned int NumRVSlist2;
+unsigned int NumGEBlist1;
+unsigned int NumGEBlist2;
+unsigned int NumGEBlist1_B5;
+unsigned int NumGEBlist2_B5;
+unsigned int NumEGSwitch;
+unsigned int NumWorkMode5;
+unsigned int NumCtrlDown;
+unsigned int NumWorkMode7;
+unsigned int NumWorkMode7TDI;
+unsigned int NumWorkMode8;
+unsigned int TouchNum;
+unsigned int GammaNum;
+unsigned int NumLRFChange;
+unsigned int AttiGoodNum;
+unsigned int numFireOff;
+float MassWeight;
+float mMax;
+float mMin;
+float mGmin;
+float mGmin1;
+float mGmin2;
+float mGmin3;
+float mGmin4;
+float J0[3][3];
+float Jf[3][3];
+float MassWeight0;
+float MassWeightF;
+unsigned int ImpDataRecErrorFlg;
+float DeltaT;
+float DeltaT1;
+unsigned int NumZm00875[3];
+unsigned int YCHANGJet150N;
+unsigned int ZCHANGJet150N;
+unsigned int OSTM_Frame0;
+unsigned int OSTM_Frame1;
+unsigned int OSTM_Frame2;
+unsigned int OSTM_Frame3;
+unsigned int OSTM_Frame4;
+unsigned int OSTM_Frame5;
+unsigned int FaultNum1;
+unsigned int FaultNum2;
+unsigned int *Task_FaultData1;
+unsigned int *Task_FaultData2;
+unsigned int *Task_FaultEndAddr1;
+unsigned int *Task_FaultEndAddr2;
+unsigned int OldProgrammPointer;
+unsigned int NumCLoseValve;
+unsigned int NumSend7500Close;
+unsigned int NumexpandBapta;
+unsigned int NumNoControl;
+float t_guidance;
+float t_lambdaT;
+float lambda_v[3];
+float t_lambda;
+float d_lambda[3];
+float lambda_v1[3];
+float t_lambda1;
+float d_lambda1[3];
+float lambda_v2[3];
+float t_lambda2;
+float d_lambda2[3];
+float dqlast1;
+float dqlast2;
+float dVpp6;
+unsigned int Flag3c;
+unsigned int SafeRadius;
+unsigned int SafeValve;
+float LandPoint[3];
+unsigned int InJectJT;
+unsigned int OnFire7500Flg;
+unsigned int NumOnFire7500;
+unsigned int JetChn;
+unsigned int JetCmd[6];
+unsigned int workmode1;
+unsigned int workmode2;
+unsigned int workmode3;
+unsigned int workmode4;
+unsigned int ValveGEB2Flg;
+unsigned int ValveRVS2Flg;
+unsigned int ValveLRFFlg;
+unsigned int AdrGPI_Old;
+unsigned int XCHANGJet150N;
+unsigned int DataCmdGEBFlg1_B7;
+unsigned int DataCmdGEBFlg2_B7;
+unsigned int DataCmdIMUFlg1_33;
+unsigned int DataCmdIMUFlg2_33;
+unsigned int DataCmdIMUFlg1_34;
+unsigned int DataCmdIMUFlg2_34;
+unsigned int DataCmdRVSFlg_84;
+unsigned int InCTRL1_CS;
+unsigned int InCTRL2_CS;
+unsigned int InCTRL3_CS;
+unsigned int InCTRL4_CS;
+unsigned int InCTRL5_CS;
+unsigned int InCTRL6_CS;
+unsigned int InCTRL7_CS;
+unsigned int InCTRL8_CS;
+unsigned int InCTRL9_CS;
+unsigned int InMODULE_CS;
+unsigned int GEBFlg;
+unsigned int STSAFlg;
+unsigned int STSBFlg;
+unsigned int STSCFlg;
+void IntOBDH(void);
+void Task128ms(void);
+void TaskServeOBDH(void);
+void ProcessGNCData(void);
+void ProcessReTime(void);
+void SendTime(void);
+void SDCContrl(void);
+void ClearControlStatus(void);
+void LTUDataGetAndProc(void);
+void ReceiveLTUData(void);
+void ReceiveLTUTele(void);
+void GetSDCStatus(void);
+void GetGNCCTime(void);
+void ModifySTSTime(SINGLE_STS *pData, unsigned int STSselect);
+void ModifyLRFTime(LRFDATA *pData);
+void ModifyRVSTime(RVSDATA *pData);
+void GetDataFromIMUE(void);
+void GetDataFromSTS(void);
+void GetDataFromSS(void);
+void GetDataFromRVS(void);
+void GetDataFromLRF(void);
+void SequenceCmd(void);
+void LTUFaultNumAdd(void);
+void DiagnoseLTU(void);
+void SwitchComputer(void);
+void DiagnoseGammaTouchdown(void);
+void CtrlDown7500N(void);
+void CtrlOrbit7500N(void);
+void CtrlOrbit1500N(void);
+void TeleCtrl7500N(void);
+void RecCCDPointData(void);
+void RecTDIPointData(void);
+void RecTouchdownData(void);
+void STSCmdSequence(void);
+void RVSCmdSequence(void);
+void LRFCmdSequence(void);
+void GEBCmdSequence(void);
+void EGSwitchCmdSequence(void);
+void LTUPackSTSCmd(unsigned int DataFlg);
+void LTUPackSTSRateSet(void);
+void LTUProcIMUE(void);
+void LTUProcSTS(unsigned int *STSData, SINGLE_STS * stInput);
+void LTUProcSS(void);
+void LTUProcLRF(void);
+void LTUProcRVS(void);
+void LTUProcRVSDmcate(void);
+void LTUProcCCDPoint(void);
+void LTUProcTDIPoint(void);
+void LTUPackCCDPointCmd(void);
+void LTUPackTDICmd(void);
+void CheckLTU(void);
+void SendLTUCmd1( unsigned int channel, unsigned int SendByteNum, unsigned int *SendBuf, unsigned int *ErrorNum);
+void SendLTUCmd( unsigned int channel, unsigned int SendByteNum, unsigned int *SendBuf, unsigned int *ErrorNum);
+void SendOneLTUCtrlCmd(unsigned int channel,unsigned int Command);
+void SendTwoLTUCtrlCmd(unsigned int channel, unsigned int Command1, unsigned int Command2);
+void SendTwoLTUCtrlCmd1(unsigned int channel, unsigned int Command1, unsigned int Command2);
+void GetLTUData(unsigned int channel, unsigned int CMDData,unsigned int RecByteNum, unsigned int *RecLTUData, unsigned int *ErrorNum);
+void GetLTUTeleData(unsigned int channel, unsigned int CMDData, unsigned int RecByteNum, unsigned int *RecTeleData);
+void GetSTSData(unsigned int channel, unsigned int *CMDData, unsigned int SendByteNum,unsigned int *RecSTSData, unsigned int RecByteNum, unsigned int *ErrorNum);
+void GetJETData(unsigned int channel, unsigned int *CMDData, unsigned int SendByteNum,unsigned int *RecJETData, unsigned int RecByteNum, unsigned int *ErrorNum);
+void GetRVSDmcateData(unsigned int channel, unsigned int *CMDData, unsigned int SendByteNum,unsigned int *RecJETData, unsigned int RecByteNum, unsigned int *ErrorNum);
+void MoveOBDHData (volatile unsigned int *source,volatile unsigned int *dest,unsigned int counter);
+void MoveImpData (volatile unsigned int *source,volatile unsigned int *dest,unsigned int counter);
+void MoveData (void *source,void *dest,unsigned int counter);
+void MoveTeleData (volatile unsigned int *source,volatile unsigned int *dest,unsigned int counter);
+void MoveMemData(volatile unsigned int *source,volatile unsigned int *dest,unsigned int counter);
+void Ini8252(void);
+void ProcessAtti1(void);
+void ProcessAtti2(void);
+void ProcessGyroPulse(void);
+void ProcessAccePulse(void);
+void ProcessIMU(void);
+void ProcessAtti(void);
+void ProcessSTSFilter(void);
+void ProcessSTSDmcate(void);
+void ProcessNavIntData(void);
+void ProcessNavigation(void);
+void ProcessJetPhase(void);
+void ProcessPID(void);
+void ProcessVelocity(void);
+void ProcessSoftland(void);
+void ProcessSunPoint(void);
+void ProcessInertiaCmd(void);
+void ProcessOrbitCmd(void);
+void ProcessBreaking(void);
+void Processapproach(void);
+void ProcessSuspending(void);
+void ProcessDiagnose(void);
+void ProcessSDCCmd(void);
+void ProcessExamineLTU(void);
+void ProcessLTUCmd(void);
+void ProcessMemCmd(void);
+void ProcessSTSCmd(void);
+void ProcessRVSDmcate(void);
+void ProcessJetCmd(void);
+void ProcessThrustorCmd(void);
+void ProcessNavSensorErr(void);
+void ProcessProgram(void);
+void ProcessMemData(void);
+void ProcessImpGNC(void);
+void PackImpGNC(void);
+void PackLanchData(void);
+void PackNormalData(void);
+void PackOrbitData(void);
+void PackRequestData(void);
+void StorageFaultData(void);
+void Init1553B_10S(void);
+void Init1553b(void);
+void Write65170Reg (unsigned int dwOffset, unsigned int data);
+void Write65170Mem (unsigned int dwOffset, unsigned int data);
+void AppInit(void);
+void WorkModeProcedure(void);
+void WorkModeFlgManage(void);
+void InitWMSunDirection(void);
+void InitWMStarDirection(void);
+void InitWMAdjustAtti(void);
+void InitWMOrbitDirection(void);
+void InitWMPreLand(void);
+void InitWMBreaking(void);
+void InitWMAdjustSpeed(void);
+void InitWMApproach(void);
+void InitWMSuspending(void);
+void InitWMAvoidance(void);
+void InitWMSlowdescent(void);
+void InitWMDampRate(void);
+void InitWMNOControl(void);
+void WorkModeLaunchPhase(void);
+void WorkModeSunDirection(void);
+void WorkModeStarDirection(void);
+void WorkModeAdjustAtti(void);
+void WorkModeOrbitDirection(void);
+void WorkModePreLand(void);
+void WorkModeBreaking(void);
+void WorkModeAdjustSpeed(void);
+void WorkModeApproach(void);
+void WorkModeSuspending(void);
+void WorkModeAvoidance(void);
+void WorkModeSlowdescent(void);
+void WorkModeDampRate(void);
+void WorkModeNOControl(void);
+void JudgeSLSPSignal(void);
+void ManageWM0(void);
+void ManageWM1(void);
+void ManageWM2(void);
+void ManageWM3(void);
+void ManageWM4(void);
+void ManageWM5(void);
+void ManageWM6(void);
+void ManageWM7(void);
+void ManageWM8(void);
+void ManageWM9(void);
+void ManageWM10(void);
+void ManageWM11(void);
+void ManageWM12(void);
+void ManageWM13(void);
+void ProcDataGyro(void);
+void ProcDataAcce(void);
+void ProcCmuFaltAcce(void);
+void ProcCmuFaltGyro(void);
+void GyroAttiEsti(void);
+void STSModify(void);
+void CaptureAndPointSun(void);
+void CaptureSunEclipse(void);
+void CaptureSunSmode1(void);
+void CaptureSunSmode3(void);
+void CaptureSunSmode4(void);
+void CaptureSunFeedBack(void);
+void CalWTIAndQ(void);
+void EstiAttiq(void);
+float Sgn(float x);
+float Mlf(float b, float c);
+float Rem(float x, float a);
+double Norm(float *a, unsigned int b);
+void DivNorm(float *a, unsigned int b);
+void DivNormQ(float *a);
+void LG(float *a, float *b);
+float VectorDot3D(const float* vax, const float* vby);
+void VectorCross3D(float* vout3, const float* vx1, const float* vy2);
+void AQ(float *b,float *aa);
+void Qa(float *cc, float *b);
+void Eq(float *b,float *aa);
+void Qm(float *b, float *c, float *a );
+void Qim(float *b, float *c, float *a );
+float arctan2(float y,float x);
+void Avv(float *a, float *b, float *c, float *d, float *ee);
+unsigned int max(unsigned int a, unsigned int b);
+float fmax(float a, float b);
+float fmin(float a, float b);
+void STSTimeCompensation(SINGLE_STS *pData);
+void SingleSTSModify1(SINGLE_STS *pData);
+void ProcGuidIntData(void);
+void GuidanceCalculate(void);
+void GuidanceCorrection(void);
+void RangingCorrection(double tm, float Rm, float wh, float hh, float whv, float hhv, float dqlast, unsigned int NumZT7, float *urb, float *hvq);
+float VelocityCorrection(double tm, float Vm, float wV, float vV, unsigned int NumZT7, float *uvb);
+void ApproachAvoidanceCCD(void);
+void SuspendingAvoidanceTDI(void);
+void SafePointCalculate(void);
+void BreakingGuidance(void);
+void AdjustSpeedGuidance(void);
+void QuarMultiRule(void);
+void ApproachGuidance(void);
+void DescentGuidance(void);
+void ThrustCalculate(void);
+void GoalAttiCalculate(void);
+void GoalCtrlCalculate(void);
+void InitPEG(void);
+void GuidanceRulePEG(void);
+void GuidanceRuleSafe(void);
+void PitchUpForecast(void);
+void JetPhaseJetSelect(void);
+void JetPhasePara(void);
+void JetPhasePara_WM1(void);
+void JetPhasePara_WM3(void);
+void JetPhasePara_WM2411(void);
+void JetPhaseParaX(void);
+void JetPhaseParaY(void);
+void JetPhaseParaZ(void);
+void PhasePlaneJetControl(unsigned int axis);
+void Jet10NSum(unsigned int i);
+void TnjsumCalculate(void);
+void PulseJetSelectJet(void);
+void PulseJetParaX(void);
+void PulseJetParaY(void);
+void PulseJetParaZ(void);
+void PulseJet(unsigned int i);
+void PulseJetSum_10N(unsigned int i);
+void PulseJet_150N_AttiX(void);
+void PulseJet_150N_X_Condition(void);
+void PulseJet_150N_TONYN_TONZ0(void);
+void PulseJet_150N_TONY0_TONZN(void);
+void PulseJet_150N_TONYN_TONZN(void);
+void PulseJetSum_150N_X(void);
+void PulseJetSum_150N_Y(void);
+void PulseJetSum_150N_Z(void);
+void DiagnoseSys(void);
+void CtrlThrusSquence(void);
+void ControlDataOutput(void);
+void OrbitControlOnandOff(void);
+void OrbitControlselectJetA(void);
+void OrbitControlselectJetB(void);
+void DiagnoseGyroAndProc(void);
+void DiagnoseGyroAndProc_ijkl(unsigned int a,unsigned int b,unsigned int c,unsigned int d);
+void DiagnoseGyroAndProc_BZ2(void);
+void DiagnoseAcceAndProc(void);
+void DiagnoseAcceAndProc_ijkl(unsigned int a,unsigned int b,unsigned int c,unsigned int d);
+void DiagnoseAcceAndProc_BZ3(void);
+void DiagnoseSTS(void);
+void STSCalibration(float *XI,float *ZI,float *BB,float time,float *tmpR, float *BR);
+void STSChange(float *InR, float *BB, float *CalBR, float *BR);
+void Calq3(float *a);
+unsigned int CheckSum(unsigned int *Data,unsigned int DataNum);
+unsigned int GetLTUByteData(unsigned int DelayNum);
+unsigned int Read65170Reg (unsigned int dwOffset);
+unsigned int Read65170Mem (unsigned int dwOffset);
+void MatrixMulti(float* product, const float* faciend, const float* multiplier, int nrow, int nrc, int ncol);
+void MatrixTran(float* tran, const float* mat, int nrow, int ncol);
+void MatrixInv33(float* invm, const float* mat);
+void Pack_HalfHigh_Int(unsigned int j, int *TeleVar, unsigned int n);
+void Pack_HalfHigh_UINT32(unsigned int j, unsigned int *TeleVar, unsigned int n);
+void Pack_HalfHigh_Float(unsigned int j, float *TeleVar, unsigned int n);
+void Pack_Bit4_3412(unsigned int j,unsigned int Bit4_BZ3,unsigned int Bit4_BZ4,unsigned int Bit4_BZ1,unsigned int Bit4_BZ2);
+unsigned int DiagnoseSingleSTS(SINGLE_STS * stInput, unsigned int *number);
+void PackTRDATA_VS(void);
+void NoCtrlSdcCtrl(void);
+void PowerDynamic(float *x, float *c, float *d, float tt, float abf, float dap, float t, float *u);
+void PowerTrajectory(float *a, float *b, float dtp, unsigned int n, float *c, float *d, float tt, float abf, float dap, float *u);
+void CoastingTrajectory(float *a, float *b, float *c, float *d, float t, float *u);
+unsigned int DoubleToUint32(double tmpdouble);
+void WorkModeSlowdescent(void)
+{
+    InitWMSlowdescent();
+    Down.NumSlow ++;
+ if(((Flg.ZT11 & 0x8) == 0x8) && (Flg.CmuFaultAMGY == 1))
+    {
+     ProcCmuFaltAcce();
+    }
+    else
+    {
+     ProcDataAcce();
+    }
+    ProcDataGyro();
+    GyroAttiEsti();
+
+    if((Flg.BZ10 & 0x10) == 0x10)
+    {
+     if((Flg.GKFlag == 1) && (GyroData.NormW < OrbitCmd.STSwGK))
+     {
+      STSModify();
+     }
+    }
+    GuidanceCalculate();
+    DescentGuidance();
+    ThrustCalculate();
+    GoalAttiCalculate();
+    EstiAttiq();
+ PulseJetSelectJet();
+ DiagnoseSys();
+
+    return;
+}
+
+void InitWMSlowdescent(void)
+{
+    unsigned int channel, tmpCmd[3];
+
+    if(WMInitFlg == 1)
+    {
+  if(Flg.BZ13 < 2)
+  {
+   channel = 0x4;
+  }
+  else
+  {
+   channel = 0x5;
+  }
+
+  tmpCmd[0] = 0xEB;
+  tmpCmd[1] = 0x90;
+  tmpCmd[2] = 0xBB;
+  if((channel == 0x4) && (Flg.GEBlist1 == 0))
+  {
+   if(Flg.GEBlist1_B5 == 0)
+   {
+
+   }
+  }
+  if((channel == 0x5) && (ValveGEB2Flg == 0) && (Flg.GEBlist2 == 0))
+  {
+   if(Flg.GEBlist2_B5 == 0)
+   {
+
+   }
+  }
+
+        Flg.GKFlag = 0;
+        Down.NumSlow = 0;
+        Down.NumDown = 0;
+
+        WMInitFlg = 0;
+    }
+    return;
+}
+
+void ProcDataAcce(void)
+{
+    unsigned int i, j, k, workmode;
+    float MatrixR3[3][3], InvMatr[3][3] ,tmpAs[3], tmpasn[6];
+
+    workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+    k = 0;
+
+    for (i = 0; i < 6; i++)
+    {
+     Acce.as[i] = Acce.as[i] / DeltaT;
+
+
+  tmpasn[i] = (float)fabs(Acce.as[i]);
+  if(tmpasn[i] < 9.8f)
+  {
+         Acce.asOld[i] = Acce.as[i];
+   }
+  else
+  {
+   Acce.as[i] = Acce.asOld[i];
+   }
+
+
+     if(Flg.AZFlag == 1)
+  {
+      if(TkCount.Tnjsum > 1)
+      {
+       Acce.as0[i] = Acce.as0[i] + Acce.mas0 * (Acce.as[i] - Acce.as0[i]);
+       Acce.as0[i] = Mlf(Acce.as0[i], Acce.As0Max);
+      }
+  }
+  else if(Flg.AZFlag == 2)
+  {
+      Acce.as0[i] = Acce.Inas0[i];
+  }
+  else
+  {
+      if(Flg.AZFlag == 3)
+      {
+       Acce.as0[i] = Acce.Initas0[i];
+      }
+  }
+    }
+
+
+ for(i = 0; i < 6; i++)
+ {
+   Acce.as[i] = Acce.as[i] - Acce.as0[i];
+ }
+
+
+
+    for (i = 0; i < 6; i++)
+    {
+        if(((Flg.BZ3 >> i) & 0x1) == 0x1)
+        {
+            for (j = 0; ((j < 3) && (k < 3)); j++)
+            {
+                MatrixR3[k][j] = MatrixVA[i][j];
+          tmpAs[k] = Acce.as[i];
+            }
+            k ++;
+        }
+    }
+    if(k == 3)
+    {
+     MatrixInv33(InvMatr[0], MatrixR3[0]);
+     MatrixMulti(Acce.aB, InvMatr[0], tmpAs, 3, 3, 1);
+    }
+
+    return;
+}
+
+void ProcDataGyro(void)
+{
+    unsigned int i, j, k, tmpGKFlag, workmode;
+    float MatrixR3[3][3], InvMatr[3][3];
+    float dg0[3], dg1[3], dg2[3], dg3[3], tmpbn[3], tmpDGn[3];
+
+    workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+    k = 0;
+    tmpGKFlag = 1;
+
+    if((Flg.BZ10 & 0x20) == 0x20)
+    {
+     for(i = 0; i < 6; i++)
+     {
+         GyroData.DGn[i] = 0.0f;
+         for(j = 0; j < 24; j = j+6)
+         {
+             if(fabs(GyroData.DG[j+i]) > 0.004189)
+             {
+              GyroData.DG[j+i] = GyroData.DGOld[j+i];
+             }
+
+             GyroData.DGOld[j+i] = GyroData.DG[j+i];
+
+             GyroData.DGn[i] = GyroData.DGn[i] + GyroData.DG[j+i];
+         }
+     }
+    }
+
+    MatrixMulti(Acce.bn, Acce.Ei[0], Acce.aB, 6, 3, 1);
+
+
+    for(i = 0; i < 6; i++)
+    {
+     GyroData.DGn[i] = GyroData.DGn[i] - (Acce.bn[i] / 9.8f + GyroData.bn[i]) * DeltaT / 3600.0f;
+     if(fabs(GyroData.DGn[i]) > 0.01676)
+     {
+      GyroData.DGn[i] = GyroData.DGnOld[i];
+     }
+
+     GyroData.DGnOld[i] = GyroData.DGn[i];
+    }
+
+
+
+    if((Flg.BZ10 & 0x20) == 0x20)
+    {
+     for(i = 0; i < 3; i++)
+     {
+      GyroData.DGT0[i] = GyroData.DGT4[i];
+     }
+
+     for(i = 0; i < 6; i++)
+     {
+   if(((Flg.BZ2 >> i) & 0x1) == 0x1)
+   {
+    for (j = 0; ((j < 3) && (k < 3)); j++)
+    {
+                 MatrixR3[k][j] = MatrixVG[i][j];
+                 dg0[k] = GyroData.DG[i];
+              dg1[k] = GyroData.DG[i+6];
+              dg2[k] = GyroData.DG[i+12];
+              dg3[k] = GyroData.DG[i+18];
+              tmpbn[k] = GyroData.bn[i];
+              Acce.b[k] = Acce.bn[i];
+    }
+          k ++;
+   }
+     }
+
+     if(k == 3)
+     {
+      if(Flg.GKFlag == 0)
+      {
+       for(i = 0; i < 3; i++)
+       {
+        if(fabs(dg0[i]) > 0.00363)
+        {
+         tmpGKFlag = 0;
+        }
+        if(fabs(dg1[i]) > 0.00363)
+        {
+         tmpGKFlag = 0;
+        }
+        if(fabs(dg2[i]) > 0.00363)
+        {
+         tmpGKFlag = 0;
+        }
+        if(fabs(dg3[i]) > 0.00363)
+        {
+         tmpGKFlag = 0;
+        }
+       }
+       if(tmpGKFlag == 0)
+       {
+        Flg.GKFlag = 1;
+       }
+      }
+
+      MatrixInv33(InvMatr[0], MatrixR3[0]);
+      for (i = 0; i < 3; i++)
+      {
+          dg0[i] = dg0[i] - (Acce.b[i] / 9.8f + tmpbn[i]) / 112500.0f;
+          dg1[i] = dg1[i] - (Acce.b[i] / 9.8f + tmpbn[i]) / 112500.0f;
+          dg2[i] = dg2[i] - (Acce.b[i] / 9.8f + tmpbn[i]) / 112500.0f;
+          dg3[i] = dg3[i] - (Acce.b[i] / 9.8f + tmpbn[i]) / 112500.0f;
+      }
+
+      MatrixMulti(GyroData.DGT1, InvMatr[0], dg0, 3, 3, 1);
+      MatrixMulti(GyroData.DGT2, InvMatr[0], dg1, 3, 3, 1);
+      MatrixMulti(GyroData.DGT3, InvMatr[0], dg2, 3, 3, 1);
+      MatrixMulti(GyroData.DGT4, InvMatr[0], dg3, 3, 3, 1);
+
+      if(((Flg.ZT11 & 0x10) == 0x10) && (workmode >= 7) && (workmode <= 12))
+      {
+
+      }
+
+      for (i = 0; i < 3; i++)
+      {
+          GyroData.xw[i] = (GyroData.DGT1[i]+GyroData.DGT2[i]+GyroData.DGT3[i]+GyroData.DGT4[i]) / DeltaT;
+      }
+     }
+    }
+    else
+    {
+     for(i = 0; i < 6; i++)
+     {
+   if(((Flg.BZ2 >> i) & 0x1) == 0x1)
+   {
+    for (j = 0; ((j < 3) && (k < 3)); j++)
+    {
+                 MatrixR3[k][j] = MatrixVG[i][j];
+    }
+    tmpDGn[k] = GyroData.DGn[i];
+          k ++;
+   }
+     }
+     if(k == 3)
+     {
+      MatrixInv33(InvMatr[0], MatrixR3[0]);
+      MatrixMulti(GyroData.DGT, InvMatr[0], tmpDGn, 3, 3, 1);
+      for (i = 0; i < 3; i++)
+      {
+          GyroData.xw[i] = GyroData.DGT[i] / DeltaT;
+      }
+     }
+    }
+
+    GyroData.NormW = (float)Norm(GyroData.xw, 3);
+
+    return;
+}
+
+void GyroAttiEsti(void)
+{
+    unsigned int i, workmode;
+    float tmp, s[3], c[3], tmpg12[3], tmpg23[3], tmpg34[3], tmpg13[3], tmpg24[3], tmpg14[3];
+    float PHI[3], nPHI, tmpq[4], qH[4];
+
+ workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+
+    tmp = (float)fabs(Atti.Angle[0]);
+    tmp = (float)cos(tmp);
+    for (i = 0; i < 3; i++)
+    {
+        s[i] = (float)sin(Atti.Angle[i]);
+        c[i] = (float)cos(Atti.Angle[i]);
+    }
+ if((workmode < 5) || (workmode > 12))
+ {
+  if(tmp > 0.1736f)
+     {
+         Atti.Rate[0] = GyroData.xw[0] * c[1] + GyroData.xw[2] * s[1];
+         Atti.Rate[1] = (GyroData.xw[0] * s[1] - GyroData.xw[2] * c[1]) * (s[0] / c[0]) + GyroData.xw[1];
+         Atti.Rate[2] = (-GyroData.xw[0] * s[1] + GyroData.xw[2] * c[1]) / c[0];
+     }
+     for(i = 0; i < 3; i++)
+     {
+         Atti.Angle[i] = Atti.Angle[i] + Atti.Rate[i] * DeltaT;
+     }
+     if(workmode == 13)
+     {
+         for(i = 0; i < 3; i++)
+         {
+             Atti.Angle[i] = Mlf(Atti.Angle[i], 0.35f);
+         }
+     }
+ }
+
+
+
+    if((Flg.BZ10 & 0x20) == 0x20)
+    {
+     VectorCross3D(tmpg12, GyroData.DGT1, GyroData.DGT2);
+     VectorCross3D(tmpg23, GyroData.DGT2, GyroData.DGT3);
+     VectorCross3D(tmpg34, GyroData.DGT3, GyroData.DGT4);
+     VectorCross3D(tmpg13, GyroData.DGT1, GyroData.DGT3);
+     VectorCross3D(tmpg24, GyroData.DGT2, GyroData.DGT4);
+     VectorCross3D(tmpg14, GyroData.DGT1, GyroData.DGT4);
+     for(i = 0; i < 3; i++)
+     {
+         tmpg12[i] = tmpg12[i] * M.a12;
+         tmpg23[i] = tmpg23[i] * M.a23;
+         tmpg34[i] = tmpg34[i] * M.a34;
+         tmpg13[i] = tmpg13[i] * M.a13;
+         tmpg24[i] = tmpg24[i] * M.a24;
+         tmpg14[i] = tmpg14[i] * M.a14;
+         PHI[i] = GyroData.DGT1[i] + GyroData.DGT2[i] + GyroData.DGT3[i] + GyroData.DGT4[i]
+                         + tmpg12[i] + tmpg23[i] + tmpg34[i] + tmpg13[i] + tmpg24[i] + tmpg14[i];
+     }
+    }
+    else
+    {
+     for(i = 0; i < 3; i++)
+     {
+      PHI[i] = GyroData.DGT[i];
+     }
+    }
+
+    nPHI = (float)Norm(PHI, 3);
+    if(nPHI < 0.0000008f)
+    {
+        qH[0] = 0.0f;
+        qH[1] = 0.0f;
+        qH[2] = 0.0f;
+        qH[3] = 1.0f;
+    }
+    else
+    {
+        qH[0] = PHI[0] / nPHI * (float)sin(0.5 * nPHI);
+        qH[1] = PHI[1] / nPHI * (float)sin(0.5 * nPHI);
+        qH[2] = PHI[2] / nPHI * (float)sin(0.5 * nPHI);
+        qH[3] = (float)cos(0.5 * nPHI);
+    }
+
+    Qm(Atti.q, qH, tmpq);
+    DivNormQ(tmpq);
+    for(i = 0; i < 4; i++)
+    {
+     Atti.q[i] = tmpq[i];
+    }
+    Qm(Atti.qg, qH, tmpq);
+    DivNormQ(tmpq);
+    for(i = 0; i < 4; i++)
+    {
+     Atti.qg[i] = tmpq[i];
+    }
+
+    AQ(Atti.q, Atti.CBI[0]);
+    MatrixTran(Atti.CIB[0], Atti.CBI[0], 3, 3);
+
+    return;
+}
+
+void STSModify(void)
+{
+    unsigned int i, j;
+
+    switch(Flg.BZ4)
+    {
+        case 1:
+            STSTimeCompensation(&STSA);
+      for(i = 0; i < 6; i++)
+      {
+          if(i < 3)
+          {
+              for(j = 0; j < 3; j++)
+              {
+                  STSA.Kst2[i][j] = STSA.KS[i][j] * M.Aq;
+              }
+          }
+          else
+          {
+              for(j = 0; j < 3; j++)
+              {
+                  STSA.Kst2[i][j] = STSA.KS[i][j] * M.Ab;
+              }
+          }
+      }
+            SingleSTSModify1(&STSA);
+        break;
+
+        case 2:
+            STSTimeCompensation(&STSB);
+      for(i = 0; i < 6; i++)
+      {
+          if(i < 3)
+          {
+              for(j = 0; j < 3; j++)
+              {
+                  STSB.Kst2[i][j] = STSB.KS[i][j] * M.Bq;
+              }
+          }
+          else
+          {
+              for(j = 0; j < 3; j++)
+              {
+                  STSB.Kst2[i][j] = STSB.KS[i][j] * M.Bb;
+              }
+          }
+      }
+            SingleSTSModify1(&STSB);
+        break;
+
+        case 4:
+            STSTimeCompensation(&STSC);
+      for(i = 0; i < 6; i++)
+      {
+          if(i < 3)
+          {
+              for(j = 0; j < 3; j++)
+              {
+                  STSC.Kst2[i][j] = STSC.KS[i][j] * M.Cq;
+              }
+          }
+          else
+          {
+              for(j = 0; j < 3; j++)
+              {
+                  STSC.Kst2[i][j] = STSC.KS[i][j] * M.Cb;
+              }
+          }
+      }
+            SingleSTSModify1(&STSC);
+        break;
+
+        default:
+        break;
+    }
+}
+
+void GuidanceCalculate(void)
+{
+  unsigned int i, workmode;
+ float tmp[3], tmpp[3], tmpRI[3], tmpF, tmpv;
+    float tmpq[4], tmpaq[3][3], tmpaqT[3][3], tmpaqq[3][3];
+    float tmpr0[3], tmpv0[3], tmph0[3], tmpCGI[3][3], tmpCIG[3][3],tmpCBMT[3][3];
+
+    workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+
+
+    for (i = 0; i < 3; i++)
+    {
+        Land.RIn1[i] = Land.RI[i];
+        Land.VIn1[i] = Land.VI[i];
+        tmp[i] = GyroData.xw[i] * DeltaT;
+  tmpp[i] = Acce.aB[i] * DeltaT;
+  tmpRI[i] = (float)Land.RI[i];
+    }
+ LG(Lunar.gIn1, tmpRI);
+
+
+    MatrixMulti(Land.aI, Atti.CIB[0], Acce.aB, 3, 3, 1);
+
+ VectorCross3D(tmpRI, tmp, tmpp);
+ MatrixMulti(tmpp, Atti.CIB[0], tmpRI, 3, 3, 1);
+    for (i = 0; i < 3; i++)
+    {
+  Land.dVI[i] = Land.aI[i] * DeltaT + 0.5f * tmpp[i];
+    }
+
+
+    for (i = 0; i < 3; i++)
+    {
+  Land.dRIN[i] = Land.VIn1[i] * DeltaT + 0.5f * DeltaT *(Land.dVI[i] + Lunar.gIn1[i] * DeltaT);
+  Land.RI[i] = Land.RIn1[i] + Land.dRIN[i];
+  tmpRI[i] = (float)Land.RI[i];
+    }
+    LG(Lunar.gI, tmpRI);
+ Lunar.gM = (float)Norm(Lunar.gI,3);
+    for (i = 0; i < 3; i++)
+    {
+  Land.dVIN[i] = Land.dVI[i] + 0.5f * DeltaT *(Lunar.gIn1[i] + Lunar.gI[i]);
+  Land.VI[i] = Land.VIn1[i] + Land.dVIN[i];
+    }
+
+
+    if(TkCount.nINNum == 0)
+    {
+     GuidanceCorrection();
+    }
+    TkCount.nINNum ++;
+    if(TkCount.nINNum == 4)
+    {
+     TkCount.nINNum = 0;
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+  tmpRI[i] = (float)Land.RI[i];
+    }
+    Land.NormRI = (float)Norm(tmpRI,3);
+    Self.H = Land.NormRI - Lunar.rM;
+    for (i = 0; i < 3; i++)
+    {
+  tmpRI[i] = (float)Land.RI[i];
+    }
+    VectorCross3D(tmp, Lunar.wMI, tmpRI);
+    for (i = 0; i < 3; i++)
+    {
+  Land.VBI[i] = Land.VI[i] - Lunar.wM * tmp[i];
+  tmpRI[i] = (float)Land.RI[i];
+    }
+    DivNorm(tmpRI, 3);
+    Self.dH = VectorDot3D(Land.VBI, tmpRI);
+    MatrixMulti(Self.VBb, Atti.CBI[0], Land.VBI, 3, 3, 1);
+
+    tmpF = Thrustor.fFC - 7500.0f;
+
+    if(fabs(tmpF) <= 1.0e-7f)
+    {
+     Thrustor.Isp7500 = Thrustor.Isp1;
+    }
+    else if(Thrustor.fFC > 3000.0f)
+    {
+     Thrustor.Isp7500 = Thrustor.Isp2;
+    }
+    else
+    {
+     Thrustor.Isp7500 = Thrustor.Isp3;
+    }
+    tmpF = (float)Norm(Land.dVI,3);
+ MassWeight = MassWeight - tmpF * MassWeight / Thrustor.Isp7500;
+ tmpF = fmin(MassWeight, mMax);
+ MassWeight = fmax(tmpF, mMin);
+
+ if((Flg.ZT11 & 0x20) == 0x20)
+ {
+  tmpv = (float)Norm(Land.VI, 3);
+  if(tmpv > 900.0f)
+  {
+   mGmin = mGmin1 + (tmpv - 1700.0f)*(mGmin1 - mGmin2)/800.0f;
+  }
+  else if(tmpv > 50.0f)
+  {
+   mGmin = mGmin2 + (tmpv - 900.0f)*(mGmin2 - mGmin3)/850.0f;
+  }
+  else
+  {
+   mGmin = mGmin3 + (tmpv - 50.0f)*(mGmin3 - mGmin4)/40.0f;
+  }
+ }
+ else
+ {
+  mGmin = 1180.0f;
+ }
+
+
+ if((workmode == 10) && (TDI.LIFlag != 1))
+ {
+  for (i = 0; i < 3; i++)
+  {
+   Land.RLI0[i] = (Land.NormRI - Self.H) * tmpRI[i];
+  }
+  Land.tLI0 = Time.Orbit;
+ }
+ if(workmode >= 9)
+ {
+  tmpF = (float)(0.5f * Lunar.wM * (Time.Orbit - Land.tLI0));
+     for (i = 0; i < 3; i++)
+     {
+   tmpq[i] = (float)(sin(tmpF) * Lunar.wMI[i]);
+     }
+  tmpq[3] = (float)cos(tmpF);
+  DivNormQ(tmpq);
+     AQ(tmpq, tmpaq[0]);
+  MatrixTran(tmpaqT[0],tmpaq[0], 3, 3);
+     MatrixMulti(Land.RLI, tmpaqT[0], Land.RLI0, 3, 3, 1);
+ }
+
+
+ for(i = 0; i < 3; i++)
+ {
+  tmp[i] = (float)Land.RI[i] - Land.RLI[i];
+
+ }
+ MatrixMulti(horizon.Lc, Atti.CBI[0], tmp, 3, 3, 1);
+ for(i = 0; i < 3; i++)
+ {
+  horizon.rICH[i] = tmp[i] - VectorDot3D(tmp, tmpRI) * tmpRI[i];
+  horizon.vBIH[i] = Land.VBI[i] - VectorDot3D(Land.VBI, tmpRI) * tmpRI[i];
+  horizon.aIH[i] = Land.aI[i] - VectorDot3D(Land.aI, tmpRI) * tmpRI[i];
+  tmpr0[i] = (float)Land.RI[i];
+ }
+
+
+ DivNorm(tmpr0, 3);
+ VectorCross3D(tmpv0, Lunar.wMI, tmpr0);
+ DivNorm(tmpv0, 3);
+ VectorCross3D(tmph0, tmpr0, tmpv0);
+ DivNorm(tmph0, 3);
+ for(i = 0; i < 3; i++)
+ {
+  tmpCGI[0][i] = tmpr0[i];
+  tmpCGI[1][i] = tmpv0[i];
+  tmpCGI[2][i] = tmph0[i];
+ }
+ MatrixMulti(Land.VBG, tmpCGI[0], Land.VBI, 3, 3, 1);
+ MatrixTran(tmpCBMT[0], Atti.CBM[0], 3, 3);
+ MatrixTran(tmpCIG[0], tmpCGI[0], 3, 3);
+ MatrixMulti(tmpaq[0], tmpCBMT[0], Atti.CBI[0], 3, 3, 3);
+ MatrixMulti(tmpaqT[0], tmpaq[0], tmpCIG[0], 3, 3, 3);
+ Atti.AngleMg[0] = (float)asin(tmpaqT[1][2]);
+ Atti.AngleMg[1] = (float)(arctan2(-tmpaqT[0][2], tmpaqT[2][2]));
+ Atti.AngleMg[2] = (float)(arctan2(-tmpaqT[1][0], tmpaqT[1][1]));
+
+
+ AQ(Atti.qGI, tmpaq[0]);
+ MatrixMulti(tmpaqq[0], tmpaq[0], tmpCIG[0], 3, 3, 3);
+ MatrixMulti(tmpaqT[0], tmpCBMT[0], tmpaqq[0], 3, 3, 3);
+ Atti.AngleMgR[0] = (float)asin(tmpaqT[1][2]);
+ Atti.AngleMgR[1] = (float)(arctan2(-tmpaqT[0][2], tmpaqT[2][2]));
+ Atti.AngleMgR[2] = (float)(arctan2(-tmpaqT[1][0], tmpaqT[1][1]));
+
+    return;
+}
+
+void DescentGuidance(void)
+{
+ unsigned int i, workmode, tmpk;
+ float hc, dhc, dh2, at, tmpvh, tmp[3], tmpF, tmpv;
+
+ at = 0.0f;
+ workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+
+ if(workmode == 10)
+ {
+  hc = Self.H - Down.Hsus;
+  dhc = Self.dH;
+  dh2 = Acce.aB[0] - Lunar.gM;
+  tmpvh = 1.5f;
+  tmpk = 0;
+ }
+ else if(workmode == 11)
+ {
+  if(t_guidance < t_lambda)
+  {
+   at = Down.at1;
+  }
+  else
+  {
+   at = Down.at2;
+  }
+  t_guidance = t_guidance + DeltaT;
+  Down.vt = Down.vt + at * DeltaT;
+  Down.ht = Down.ht + Down.vt * DeltaT + 0.5f * at * DeltaT * DeltaT;
+
+  hc = Self.H - Down.ht;
+  dhc = Self.dH - Down.vt;
+  dh2 = Acce.aB[0] - Lunar.gM;
+  tmpvh = 3.0f;
+  tmpk = 1;
+
+ }
+ else if(workmode == 12)
+ {
+  hc = 0.0f;
+  dhc = Self.dH - Down.vslw;
+  dh2 = Acce.aB[0] - Lunar.gM;
+  tmpvh = 1.5f;
+  tmpk = 0;
+ }
+ else
+ {
+  dh2 = 0.0f;
+  tmpk = 0;
+  dhc = 0.0f;
+  hc = 0.0f;
+  tmpvh = 0.0f;
+ }
+
+
+ for(i = 0; i < 3; i++)
+ {
+  tmp[i] = (float)Land.RI[i];
+ }
+ DivNorm(tmp, 3);
+ for(i = 0; i < 3; i++)
+ {
+  Thrustor.aIC[i] = fmax((-Thrustor.c3 * dh2 * (1 - tmpk) - Thrustor.c2 * dhc - Thrustor.c1 * hc + Lunar.gM + at * tmpk), 1500.0f / MassWeight) * tmp[i];
+  horizon.aICH[i] = 0.0f;
+ }
+ tmpF = horizon.vBIH[1] * horizon.vBIH[1] + horizon.vBIH[2] * horizon.vBIH[2];
+ tmpF = (float)sqrt(tmpF);
+ if(tmpF > tmpvh)
+ {
+  for(i = 0; i < 3; i++)
+  {
+   horizon.aICH[i] = -horizon.d3 * horizon.aIH[i] - horizon.d2 * horizon.vBIH[i] - horizon.d1 * horizon.rICH[i];
+  }
+  tmpF = (float)Norm(horizon.aICH, 3);
+  tmpv = (float)Norm(Thrustor.aIC, 3);
+  tmpF = (float)tan(tmpF/tmpv);
+  if(tmpF > Land.tanTheta)
+  {
+   for(i = 0; i < 3; i++)
+   {
+    tmp[i] = horizon.aICH[i];
+   }
+   DivNorm(tmp, 3);
+   for(i = 0; i < 3; i++)
+   {
+    horizon.aICH[i] = Land.tanTheta * (float)Norm(Thrustor.aIC, 3) * tmp[i];
+   }
+  }
+  for(i = 0; i < 3; i++)
+  {
+   Thrustor.aIC[i] = Thrustor.aIC[i] + horizon.aICH[i];
+  }
+ }
+ if(Norm(Thrustor.aIC, 3) > (5000.0f / MassWeight))
+ {
+  DivNorm(Thrustor.aIC, 3);
+  for(i = 0; i < 3; i++)
+  {
+   Thrustor.aIC[i] = 5000.0f / MassWeight * Thrustor.aIC[i];
+  }
+ }
+ if(Norm(Thrustor.aIC, 3) < (1500.0f / MassWeight))
+ {
+  DivNorm(Thrustor.aIC, 3);
+  for(i = 0; i < 3; i++)
+  {
+   Thrustor.aIC[i] = 1500.0f / MassWeight * Thrustor.aIC[i];
+  }
+ }
+
+
+ if(Flg.SLPFlag == 1)
+ {
+  tmpk = 1;
+ }
+ else
+ {
+  tmpk = 0;
+ }
+ horizon.Lcy = horizon.Lc[1]- horizon.Lcy0 * tmpk;
+ horizon.dLcy = Self.VBb[1];
+ horizon.Lcz = horizon.Lc[2]- horizon.Lcz0 * tmpk;
+ horizon.dLcz = Self.VBb[2];
+
+    return;
+}
+
+void ThrustCalculate(void)
+{
+ unsigned int a, workmode, tmpFlg1, tmpFlg2;
+ float tmp, tmpF150;
+ float Lcyt, dLcyt, Lczt, dLczt;
+ float tmpMax1, tmpMax2, tmpMax3, tmpMax4;
+ float tmpMin1, tmpMin2, tmpMin3, tmpMin4;
+
+ workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+ tmpFlg1 = 0;
+ tmpFlg2 = 0;
+
+
+ if(workmode == 7)
+ {
+  Thrustor.fFC = Thrustor.FCBK;
+  Thrustor.fdFC = 0.0f;
+  if((FailureFlag == 4) && (Flg.PEGChFlg != 2) && (Flg.F5000Flg == 1))
+  {
+   Thrustor.fFC = 5000.0f;
+   Thrustor.fdFC = Thrustor.fFC - MassWeight * Acce.aB[0];
+  }
+  if((FailureFlag == 5) || ((FailureFlag == 4) && (Flg.PEGChFlg == 2)))
+  {
+   tmpFlg1 = 1;
+  }
+ }
+ if((workmode == 8) || (workmode == 9) || (workmode == 10) || (workmode == 11) || (workmode == 12))
+ {
+  tmpFlg2 = 1;
+ }
+ if((tmpFlg1 == 1) || (tmpFlg2 == 1))
+ {
+  tmp = MassWeight * ((float)Norm(Thrustor.aIC, 3));
+  Thrustor.fFC = fmax(fmin(tmp, 5000.0f), 1500.0f);
+
+  tmpMax1 = fmax((Thrustor.Tdy150 + (float)fabs(Pulse.Tym150p) - DeltaT), 0.0f);
+  tmpMax2 = fmax((Thrustor.Tdy150 + (float)fabs(Pulse.Tyb150p) - DeltaT), 0.0f);
+  tmpMax3 = fmax((Thrustor.Tdy150 + (float)fabs(Pulse.Tzm150p) - DeltaT), 0.0f);
+  tmpMax4 = fmax((Thrustor.Tdy150 + (float)fabs(Pulse.Tzb150p) - DeltaT), 0.0f);
+  tmpMin1 = fmin((float)fabs(Pulse.Tym150p), (DeltaT - Thrustor.Tdy150));
+  tmpMin2 = fmin((float)fabs(Pulse.Tyb150p), (DeltaT - Thrustor.Tdy150));
+  tmpMin3 = fmin((float)fabs(Pulse.Tzm150p), (DeltaT - Thrustor.Tdy150));
+  tmpMin4 = fmin((float)fabs(Pulse.Tzb150p), (DeltaT - Thrustor.Tdy150));
+  tmpF150 = 150.0f * (tmpMax1 + tmpMax2 + tmpMax3 + tmpMax4 + tmpMin1
+      + tmpMin2 + tmpMin3 + tmpMin4) / DeltaT;
+  Thrustor.fdFC = Thrustor.fFC - MassWeight * Acce.aB[0] + (tmpF150 - Thrustor.dFup) * ((Flg.BZ10 & 0x40)>>6);
+  if((Flg.BZ10 & 0x40) == 0x40)
+  {
+   Thrustor.fdFC = fmax(fmin(Thrustor.fdFC, 600.0f), -600.0f);
+   Thrustor.dFup = Thrustor.fdFC * (Thrustor.Tdy7500+(float)fabs(Thrustor.fdFC)/7500.0f/2.0f/Thrustor.dFps) / DeltaT;
+  }
+  else
+  {
+   Thrustor.dFup = 0.0f;
+  }
+ }
+
+
+ if((workmode == 10) || (workmode == 11) || (workmode == 12))
+ {
+  a = 0;
+  Lcyt=horizon.Lcy;
+  dLcyt=horizon.dLcy;
+
+  if(fabs(horizon.Lcy) > horizon.LHm)
+  {
+   Lcyt = 0.0f;
+   dLcyt = horizon.dLcy + Sgn(horizon.Lcy) * horizon.dLHm;
+  }
+  horizon.tony = 0.0f;
+  tmp = horizon.K * dLcyt + Lcyt;
+  if((dLcyt >= 0.0f) && (tmp >= horizon.Ld))
+  {
+   horizon.tony = - DeltaT - Changeable.DeltTadd;
+  }
+  else if((dLcyt < 0.0f) && (tmp >= (1.0f - horizon.H) * horizon.Ld))
+  {
+   horizon.tony = - DeltaT - Changeable.DeltTadd;
+  }
+  else
+  {
+   a = a;
+  }
+  if((dLcyt >= 0.0f) && (tmp <= -(1.0f - horizon.H) * horizon.Ld))
+  {
+   horizon.tony = DeltaT + Changeable.DeltTadd;
+  }
+  else if((dLcyt < 0.0f) && (tmp <= -horizon.Ld))
+  {
+   horizon.tony = DeltaT + Changeable.DeltTadd;
+  }
+  else
+  {
+   a = a;
+  }
+
+
+  Lczt=horizon.Lcz;
+  dLczt=horizon.dLcz;
+  if(fabs(horizon.Lcz) > horizon.LHm)
+  {
+   Lczt = 0.0f;
+   dLczt = horizon.dLcz + Sgn(horizon.Lcz) * horizon.dLHm;
+  }
+  horizon.tonz = 0.0f;
+  tmp = horizon.K * dLczt + Lczt;
+  if((dLczt >= 0.0f) && (tmp >= horizon.Ld))
+  {
+   horizon.tonz = - DeltaT - Changeable.DeltTadd;
+  }
+  else if((dLczt < 0.0f) && (tmp >= (1.0f - horizon.H) * horizon.Ld))
+  {
+   horizon.tonz = - DeltaT - Changeable.DeltTadd;
+  }
+  else
+  {
+   a = a;
+  }
+  if((dLczt >= 0.0f) && (tmp <= -(1.0f - horizon.H) * horizon.Ld))
+  {
+   horizon.tonz = DeltaT + Changeable.DeltTadd;
+  }
+  else if((dLczt < 0.0f) && (tmp <= -horizon.Ld))
+  {
+   horizon.tonz = DeltaT + Changeable.DeltTadd;
+  }
+  else
+  {
+   a = a;
+  }
+ }
+
+    return;
+}
+
+void GoalAttiCalculate(void)
+{
+ unsigned int i, j, workmode;
+ float Xc[3], Yc[3], Zc[3], CMI[3][3], tmpCMI[3][3], tmpFqR[3][3];
+ float tmpF[3], tmpw[3], tmpcosa;
+ float tmp1[3], tmp2[3], tmpq[4], tmptheta;
+
+ workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+
+
+    if((workmode >= 10) && (workmode <= 12))
+    {
+  for (i = 0; i < 3; i++)
+  {
+   Xc[i] = (float)Land.RI[i];
+  }
+  DivNorm(Xc, 3);
+     VectorCross3D(Yc, Lunar.wMI, Xc);
+  DivNorm(Yc, 3);
+    }
+    else
+    {
+  for (i = 0; i < 3; i++)
+  {
+   Xc[i] = Thrustor.aIC[i];
+   tmpF[i] = (float)Land.RI[i];
+  }
+  DivNorm(Xc, 3);
+  DivNorm(tmpF, 3);
+  tmpcosa = VectorDot3D(Xc, tmpF);
+  if(tmpcosa > 0.0f)
+  {
+   for(i = 0; i < 3; i++)
+   {
+    Xc[i] = Xc[i];
+   }
+  }
+  else
+  {
+   for(i = 0; i < 3; i++)
+   {
+    Xc[i] = Xc[i] - tmpcosa*tmpF[i];
+   }
+   DivNorm(Xc, 3);
+  }
+     for(i = 0; i < 3; i++)
+     {
+      Yc[i] = -BkData.Worbit[i];
+     }
+    }
+    VectorCross3D(Zc, Xc, Yc);
+    DivNorm(Zc, 3);
+    VectorCross3D(Yc, Zc, Xc);
+
+    if((workmode >= 10) && (workmode <= 12))
+    {
+  for (i = 0; i < 3; i++)
+  {
+   tmp1[i] = Thrustor.aIC[i];
+  }
+  DivNorm(tmp1, 3);
+  tmptheta = VectorDot3D(Xc, tmp1);
+  tmptheta = Mlf(tmptheta, 1.0f);
+
+  if(fabs(tmptheta) <= 1.0)
+  {
+   tmptheta = (float)acos(tmptheta);
+  }
+  else
+  {
+   if(tmptheta > 1.0f)
+   {
+    tmptheta = (float)acos(1.0);
+   }
+   else
+   {
+    tmptheta = (float)acos(-1.0);
+   }
+  }
+  VectorCross3D(tmp2, Xc, tmp1);
+  DivNorm(tmp2, 3);
+  for(i = 0; i < 3; i++)
+     {
+      tmpq[i] = tmp2[i] * (float)sin(tmptheta/2.0);
+     }
+     tmpq[3] = (float)cos(tmptheta/2.0);
+     AQ(tmpq, tmpFqR[0]);
+  for (i = 0; i < 3; i++)
+  {
+   CMI[0][i] = Xc[i];
+   CMI[1][i] = Yc[i];
+   CMI[2][i] = Zc[i];
+  }
+  MatrixMulti(tmpCMI[0], CMI[0], tmpFqR[0], 3, 3, 3);
+  for(i = 0; i < 3; i++)
+  {
+   for(j = 0; j < 3; j++)
+   {
+    CMI[i][j] = tmpCMI[i][j];
+   }
+  }
+    }
+    else
+    {
+  for (i = 0; i < 3; i++)
+  {
+   CMI[0][i] = Xc[i];
+   CMI[1][i] = Yc[i];
+   CMI[2][i] = Zc[i];
+  }
+    }
+ for (i = 0; i < 3; i++)
+ {
+  Atti.qGI0[i] = Atti.qGI[i];
+ }
+ Atti.qGI0[3] = Atti.qGI[3];
+
+
+ MatrixMulti(tmpCMI[0], Atti.CBM[0], CMI[0], 3, 3, 3);
+ Qa(tmpCMI[0], Atti.qGI);
+ DivNormQ(Atti.qGI);
+
+
+ for(i = 0; i < 3; i++)
+ {
+  tmpF[i] = 0.0f;
+ }
+ if(workmode == 7)
+ {
+  if((FailureFlag == 0) || ((FailureFlag == 4) && (Flg.PEGChFlg == 2)))
+  {
+   for(i = 0; i < 3; i++)
+   {
+    tmpF[i] = d_lambda1[i];
+   }
+  }
+ }
+ if((workmode == 8) || ((workmode == 9) && (Flg.PDMSFlag == 3)))
+ {
+  for(i = 0; i < 3; i++)
+  {
+   tmpF[i] = d_lambda[i];
+  }
+ }
+ MatrixMulti(tmpw, CMI[0], tmpF, 3, 3, 1);
+ tmpw[0] = 0.0f;
+ tmpw[2] = 0.0f;
+ MatrixMulti(GyroData.xwTI, Atti.CBM[0], tmpw, 3, 3, 1);
+
+    return;
+}
+
+void EstiAttiq(void)
+{
+    unsigned int i, workmode;
+    float aa[3][3], tmp[3], tmpq[4], tmp1;
+
+ workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+
+
+    Qim(Atti.qGI, Atti.q, Atti.qBT);
+    DivNormQ(Atti.qBT);
+    Atti.absqBT = (float)Norm(Atti.qBT, 3);
+    AQ(Atti.qBT, aa[0]);
+    MatrixMulti(tmp, aa[0], GyroData.xwTI, 3, 3, 1);
+    for (i = 0; i < 3; i++)
+    {
+        GyroData.xwBT[i] = GyroData.xw[i] - tmp[i];
+    }
+
+
+ if(fabs(Atti.qBT[3]) <= 1.0)
+ {
+  tmp1 = (float)(2.0 * acos(Atti.qBT[3]));
+ }
+ else if(Atti.qBT[3] > 1.0f)
+ {
+  tmp1 = (float)(2.0 * acos(1.0));
+ }
+ else
+ {
+  tmp1 = (float)(2.0 * acos(-1.0));
+ }
+
+  if((workmode >= 5) && (workmode <= 12))
+  {
+   Flg.AVCFlag = 0;
+   if(tmp1 >= Atti.ThetaM)
+   {
+    Flg.AVCFlag = 1;
+    for(i = 0; i < 3; i++)
+    {
+     tmpq[i] = Atti.qBT[i];
+    }
+   DivNorm(tmpq, 3);
+    for(i = 0; i < 3; i++)
+    {
+     GyroData.xwBT[i] = GyroData.xw[i] - Atti.dThetaR * tmpq[i];
+    }
+   }
+  }
+
+
+    for (i = 0; i < 3; i++)
+    {
+        Atti.AngleC[i] = Atti.qBT[i] * 2.0f;
+        Atti.RateC[i] = GyroData.xwBT[i];
+    }
+
+    return;
+}
+
+float Mlf(float b, float c)
+{
+    if(c > 1.0e-7f)
+    {
+        if(fabs(b) < c)
+        {
+            return b;
+        }
+        else
+        {
+            return c * Sgn(b);
+        }
+    }
+    else
+    {
+        return b;
+    }
+}
+
+void MatrixInv33(float* invm, const float* mat)
+{
+    float det;
+    float fabsdet;
+
+    det = mat[0] * mat[4] * mat[8] -
+          mat[0] * mat[5] * mat[7] -
+          mat[3] * mat[1] * mat[8] +
+          mat[3] * mat[2] * mat[7] +
+          mat[6] * mat[1] * mat[5] -
+          mat[6] * mat[2] * mat[4];
+
+    fabsdet = (float)fabs(det);
+    if(fabsdet > 1.0e-7f)
+    {
+        invm[0] = ( mat[4] * mat[8] - mat[5] * mat[7]) / det;
+        invm[1] = (-mat[1] * mat[8] + mat[2] * mat[7]) / det;
+        invm[2] = ( mat[1] * mat[5] - mat[2] * mat[4]) / det;
+        invm[3] = (-mat[3] * mat[8] + mat[5] * mat[6]) / det;
+        invm[4] = ( mat[0] * mat[8] - mat[2] * mat[6]) / det;
+        invm[5] = (-mat[0] * mat[5] + mat[2] * mat[3]) / det;
+        invm[6] = ( mat[3] * mat[7] - mat[4] * mat[6]) / det;
+        invm[7] = (-mat[0] * mat[7] + mat[1] * mat[6]) / det;
+        invm[8] = ( mat[0] * mat[4] - mat[1] * mat[3]) / det;
+    }
+
+    return;
+}
+
+void MatrixMulti(float* product,
+                 const float* faciend,
+                 const float* multiplier, int nrow, int nrc, int ncol)
+{
+    int ir, jc, nk, index;
+
+    for(ir=0; ir<nrow; ir++)
+    {
+        for(jc=0; jc<ncol; jc++)
+        {
+            index = ir * ncol + jc;
+
+            product[index] = 0.0f;
+
+            for (nk=0; nk<nrc; nk++)
+            {
+                product[index] = product[index] +
+                    faciend[ir * nrc + nk] * multiplier[nk * ncol + jc];
+            }
+        }
+    }
+
+    return;
+}
+
+double Norm(float *a, unsigned int b)
+{
+    unsigned int i;
+    double tmp;
+    double c[3];
+    tmp = 0.0f;
+
+    for(i = 0; i < b; i ++)
+    {
+        c[i] = a[i];
+        tmp = tmp + c[i] * c[i];
+    }
+    tmp = sqrt(tmp);
+    return tmp ;
+}
+
+void VectorCross3D(float* vout3,
+                   const float* vx1, const float* vy2)
+{
+    vout3[0] = vx1[1] * vy2[2] - vx1[2] * vy2[1];
+    vout3[1] = vx1[2] * vy2[0] - vx1[0] * vy2[2];
+    vout3[2] = vx1[0] * vy2[1] - vx1[1] * vy2[0];
+
+    return;
+}
+
+void Qm(float *b, float *c, float *a )
+{
+    a[0] = b[0]*c[3] + b[1]*c[2] - b[2]*c[1] + b[3]*c[0];
+    a[1] = -b[0]*c[2] + b[1]*c[3] + b[2]*c[0] + b[3]*c[1];
+    a[2] = b[0]*c[1] - b[1]*c[0] + b[2]*c[3] + b[3]*c[2];
+    a[3] = -b[0]*c[0] - b[1]*c[1] - b[2]*c[2] + b[3]*c[3];
+    return;
+}
+
+void DivNormQ(float *a)
+{
+    unsigned int i;
+    double tmp;
+
+    tmp = 0.0;
+
+    if(a[3] < 0.0f)
+    {
+        for (i = 0; i < 4; i++)
+        {
+            a[i] = -a[i];
+        }
+    }
+
+    for(i = 0; i < 4; i ++)
+    {
+        tmp = tmp + (double)a[i] * (double)a[i];
+    }
+    tmp = sqrt(tmp);
+
+  if(tmp > 1.0e-7f)
+    {
+     for(i = 0; i < 4; i ++)
+     {
+         a[i] = a[i] / (float)tmp;
+     }
+    }
+    else
+    {
+     for(i = 0; i < 3; i ++)
+     {
+      a[i] = 0.0f;
+     }
+     a[3] = 1.0f;
+    }
+
+    return;
+}
+
+void AQ(float *b,float *aa)
+{
+    aa[0] = 1 - 2*b[1]*b[1] - 2*b[2]*b[2];
+    aa[1] = 2*b[0]*b[1] + 2*b[2]*b[3];
+    aa[2] = 2*b[0]*b[2] - 2*b[1]*b[3];
+
+    aa[3] = 2*b[0]*b[1] - 2*b[2]*b[3];
+    aa[4] = 1 - 2*b[0]*b[0] - 2*b[2]*b[2];
+    aa[5] = 2*b[1]*b[2] + 2*b[0]*b[3];
+
+    aa[6] = 2*b[0]*b[2] + 2*b[1]*b[3];
+    aa[7] = 2*b[1]*b[2] - 2*b[0]*b[3];
+    aa[8] = 1 - 2*b[0]*b[0] - 2*b[1]*b[1];
+    return;
+}
+
+void MatrixTran(float* tran, const float* mat, int nrow, int ncol)
+{
+    int i, j;
+
+    for(i=0; i<nrow; i++)
+    {
+        for(j=0; j<ncol; j++)
+        {
+            *(tran + j * nrow + i) = *(mat + i * ncol + j);
+        }
+    }
+
+    return;
+}
+
+void STSTimeCompensation(SINGLE_STS *pData)
+{
+    unsigned int i;
+    float tmpMatr[3][3];
+    float tmpXB[3],tmpYB[3],tmpZB[3];
+
+    for (i = 0; i < 3; i++)
+    {
+        tmpMatr[i][i] = 0.0f;
+    }
+
+    tmpMatr[0][1] = -GyroData.xw[2];
+    tmpMatr[0][2] = GyroData.xw[1];
+    tmpMatr[1][0] = GyroData.xw[2];
+    tmpMatr[1][2] = -GyroData.xw[0];
+    tmpMatr[2][0] = -GyroData.xw[1];
+    tmpMatr[2][1] = GyroData.xw[0];
+
+    MatrixMulti(tmpXB, tmpMatr[0], pData->XB, 3, 3, 1);
+    MatrixMulti(tmpYB, tmpMatr[0], pData->YB, 3, 3, 1);
+    MatrixMulti(tmpZB, tmpMatr[0], pData->ZB, 3, 3, 1);
+    for (i = 0; i < 3; i++)
+    {
+        pData->DeltaXB[i] = tmpXB[i] * (float)(pData->Time);
+        pData->DeltaYB[i] = tmpYB[i] * (float)(pData->Time);
+        pData->DeltaZB[i] = tmpZB[i] * (float)(pData->Time);
+    }
+    return;
+}
+
+void SingleSTSModify1(SINGLE_STS *pData)
+{
+    unsigned int a, i, j, k = 0;
+    unsigned int workmode, tmpNum;
+    float tmp1[3], tmp2[3], tmp3[3];
+    float MatrixR3[3][3], InvMatr[3][3], deltaZ[3], deltaq[3], deltab[3], tmpq[4];
+ float tt[4][3], t[6], tmpb[3], tmpbn[3];
+
+ a = 0;
+ tmpNum = 0;
+ workmode = (Tr32_uint((unsigned int *)0x2042800,(unsigned int *)0x2045400,(unsigned int *)0x2048000));
+
+ VectorCross3D(tmp1, pData->XB, pData->DeltaXB);
+ VectorCross3D(tmp2, pData->YB, pData->DeltaYB);
+ VectorCross3D(tmp3, pData->ZB, pData->DeltaZB);
+ for(i = 0; i < 3; i++)
+ {
+  pData->DeltaX[i] = tmp1[i] + pData->DeltaX[i];
+  pData->DeltaY[i] = tmp2[i] + pData->DeltaY[i];
+  pData->DeltaZ[i] = tmp3[i] + pData->DeltaZ[i];
+ }
+ for (i = 0; i < 3; i++)
+ {
+  deltaZ[i] = (pData->DeltaX[i] + pData->DeltaY[i] + pData->DeltaZ[i]) / 2.0f;
+ }
+
+ MatrixMulti(t, pData->Kst2[0], deltaZ, 6, 3, 1);
+
+
+ if((pData->Time < 0.0f) || (pData->Time > M.MsDeltaT))
+ {
+     for (i = 0; i < 6; i++)
+     {
+         t[i] = 0.0f;
+     }
+    }
+
+    if(((pData->Time + DeltaT) > (TkCount.Tnjsum*DeltaT)) || (TkCount.Tnjsum*DeltaT < 1.5*DeltaT))
+    {
+     if((workmode == 1) || (workmode == 2) || (workmode == 4))
+     {
+      for (i = 0; i < 6; i++)
+      {
+          t[i] = 0.0f;
+      }
+     }
+    }
+
+ if(((workmode >= 4) && (workmode <= 13)) || (GyroData.NormW > M.Wsdb))
+ {
+     for (i = 3; i < 6; i++)
+     {
+         t[i] = 0.0f;
+     }
+    }
+
+ for (i = 0; i < 3; i++)
+ {
+  deltaq[i] = t[i];
+  deltab[i] = t[i+3];
+ }
+ Eq(Atti.q, tt[0]);
+ MatrixMulti(tmpq, tt[0], deltaq, 4, 3, 1);
+ for (i = 0; i < 3; i++)
+ {
+  Atti.q[i] = Atti.q[i] + tmpq[i];
+ }
+ Atti.q[3] = Atti.q[3] + tmpq[3];
+ DivNormQ(Atti.q);
+
+ for (i = 0; i < 6; i++)
+    {
+        if(((Flg.BZ2 >> i) & 0x1) == 0x1)
+        {
+            for (j = 0; ((j < 3) && (k < 3)); j++)
+            {
+    MatrixR3[k][j] = MatrixVG[i][j];
+            }
+            tmpbn[k] = GyroData.bn[i];
+            k ++;
+        }
+    }
+
+    if(k == 3)
+    {
+     MatrixInv33(InvMatr[0], MatrixR3[0]);
+     MatrixMulti(Atti.b, InvMatr[0], tmpbn, 3, 3, 1);
+    }
+
+    for(i = 0; i < 3; i++)
+    {
+     Atti.b[i] = Atti.b[i] + deltab[i];
+  Atti.b[i] = Mlf(Atti.b[i],0.5236f);
+    }
+
+ MatrixMulti(tmpb, MatrixR3[0], Atti.b, 3, 3, 1);
+
+ if(k == 3)
+ {
+  for (i = 0; i < 6; i++)
+  {
+   if(((Flg.BZ2 >> i) & 0x1) == 0x1)
+   {
+    tmpNum ++;
+    if(tmpNum == 1)
+    {
+     GyroData.bn[i] = tmpb[0];
+    }
+    else if(tmpNum == 2)
+    {
+     GyroData.bn[i] = tmpb[1];
+    }
+    else if(tmpNum == 3)
+    {
+     GyroData.bn[i] = tmpb[2];
+    }
+    else
+    {
+     a = a;
+    }
+   }
+     }
+ }
+
+    return;
+}
+
+void LG(float *a, float *b)
+{
+    unsigned int i;
+    float tmp = 0.0f;
+
+    for(i = 0; i < 3; i ++)
+    {
+        tmp = tmp + b[i] * b[i];
+    }
+    tmp = (float)sqrt(tmp);
+
+    for(i = 0; i < 3; i ++)
+    {
+        a[i] = -4.9028e12f * b[i] / tmp / tmp / tmp ;
+    }
+    return;
+}
+
+void GuidanceCorrection(void)
+{
+ unsigned int i, j, tmpFlg, tmpFlg1, tmpFlg2, tmpFlg3, NumZT7, tmpSumNum;
+ unsigned int tmpFlag1, tmpFlag2, tmppFlag1, tmppFlag2, tmppFlag3;
+ float tmpXI[3], tmp, tmpB1, tmpB2, tmpR[3];
+ float tmphvq[3], dqu1, dqu2;
+ float rm, tmpwh, tmphh, tmpwhv, tmphhv, dVp1, dVp2, dVp3, dVp5, dVp6;
+ float vm, tmpw, tmpvc, uRB[3], uVB[3], tmpdH1, tmpdH2, tmpdVer1, tmpdVer2;
+ float tmp43[4][3], tmp4[4], tmp3[3], tmp33[3][3], Invtmp33[3][3];
+ float tmp2[2], tmp23[2][3], tmp1, tmp13[3], tmpacos1, tmpacos2, dVgb[3], tmpA[3], tmpB[3];
+ double tm;
+
+    tmpFlg = 1;
+    tmpFlag1 = 0;
+    tmpFlag2 = 0;
+    tmppFlag1 = 0;
+    tmppFlag2 = 0;
+    tmppFlag3 = 0;
+ tmpdH1 = 0.0f;
+ tmpdH2 = 0.0f;
+ tmpdVer1 = 0.0f;
+ tmpdVer2 = 0.0f;
+ dVp1 = 0.0f;
+ dVp2 = 0.0f;
+ dVp3 = 0.0f;
+ dVp5 = 0.0f;
+ tmp1 = 0.0f;
+
+
+    if(Self.H < RVS.HRmax)
+    {
+     Flg.RFlag = 1;
+    }
+    if(Self.H < RVS.HRmin)
+    {
+     Flg.RFlag = 0;
+    }
+    if(Self.H < RVS.HVmax)
+    {
+     Flg.VFlag = 1;
+    }
+    if(Self.H < RVS.HVmax5)
+    {
+     Flg.VFlag5 = 1;
+    }
+    if(Self.H < RVS.HVmin)
+    {
+     Flg.VFlag = 0;
+     Flg.VFlag5 = 0;
+    }
+
+
+    for(i = 0; i < 3; i++)
+    {
+     tmpXI[i] = Atti.CIB[i][0];
+     tmpR[i] = (float)Land.RI[i];
+    }
+    DivNorm(tmpR, 3);
+    tmp = VectorDot3D(tmpXI, tmpR);
+    if((Flg.RSflg == 0) && (tmp > RVS.cosa))
+    {
+     Flg.RSflg = 1;
+     Flg.LRFChange = 1;
+     Flg.RVSChange = 1;
+     NumRVSChange = 0;
+     NumLRFChange = 0;
+    }
+
+
+
+    Flg.BZ7 = 0;
+    dqu1 = 0.0f;
+    dqu2 = 0.0f;
+    tmpFlg1 = 0;
+    tmpFlg2 = 0;
+    tmpFlg3 = 0;
+
+    if(Flg.RFlag == 1)
+    {
+     if(Flg.RSflg == 0)
+     {
+      if(LTUErrorNum.IdleLRF == LTUErrorNum.LTUErrorNumLRF)
+      {
+
+       if(((Flg.ZT7 & 0x1) == 0x1) && (LRF.DataValid[0] == 1) && (LRF.TmpFlg[0] == 1))
+       {
+        tm = LRF.AxisTime[0];
+        rm = LRF.ZI;
+        NumZT7 = 0x1;
+        tmpwh = LRF.Wh1[0];
+        tmphh = LRF.Hh1[0];
+        tmpwhv = LRF.Wh1[1];
+        tmphhv = LRF.Hh1[1];
+        for (i = 0; i < 3; i++)
+        {
+      uRB[i] = LRF.URBZ[i];
+        }
+        tmpFlg1 = 1;
+     RangingCorrection(tm, rm, tmpwh, tmphh, tmpwhv, tmphhv, dqlast1, NumZT7, uRB, tmphvq);
+     tmpdH1 = tmphvq[0];
+     tmpdVer1 = tmphvq[1];
+     dqu1 = tmphvq[2];
+     LRF.dquRLZ = dqu1;
+       }
+      }
+      if((LTUErrorNum.IdleRVS1 == LTUErrorNum.RVS1) && (LTUErrorNum.IdleRVS2 == LTUErrorNum.RVS2))
+      {
+
+       if(((Flg.ZT7 & 0x20) == 0x20) && (RVS.R4Flg == 1) && (RVS.TmpFlg[1] == 1))
+       {
+        tm = RVS.R4R5Time;
+        rm = RVS.RmR4;
+        NumZT7 = 0x20;
+        tmpwh = RVS.Wh2[0];
+        tmphh = RVS.Hh2[0];
+        tmpwhv = RVS.Wh2[1];
+        tmphhv = RVS.Hh2[1];
+        for (i = 0; i < 3; i++)
+        {
+      uRB[i] = RVS.URB4[i];
+        }
+        tmpFlg2 = 1;
+     RangingCorrection(tm, rm, tmpwh, tmphh, tmpwhv, tmphhv, dqlast2, NumZT7, uRB, tmphvq);
+     tmpdH2 = tmphvq[0];
+     tmpdVer2 = tmphvq[1];
+     dqu2 = tmphvq[2];
+     RVS.dquRR4 = dqu2;
+       }
+      }
+  }
+  else
+  {
+   if(LTUErrorNum.IdleLRF == LTUErrorNum.LTUErrorNumLRF)
+   {
+
+    if(((Flg.ZT7 & 0x2) == 2) && (LRF.DataValid[1] == 1) && (LRF.TmpFlg[1] == 1))
+       {
+        tm = LRF.AxisTime[1];
+        rm = LRF.XI;
+        NumZT7 = 0x2;
+        tmpwh = LRF.Wh1[0];
+        tmphh = LRF.Hh1[0];
+        tmpwhv = LRF.Wh1[1];
+        tmphhv = LRF.Hh1[1];
+        for (i = 0; i < 3; i++)
+        {
+      uRB[i] = LRF.URBX[i];
+        }
+        tmpFlg1 = 1;
+     RangingCorrection(tm, rm, tmpwh, tmphh, tmpwhv, tmphhv, dqlast1, NumZT7, uRB, tmphvq);
+     tmpdH1 = tmphvq[0];
+     tmpdVer1 = tmphvq[1];
+     dqu1 = tmphvq[2];
+     LRF.dquRLX = dqu1;
+       }
+   }
+   if((LTUErrorNum.IdleRVS1 == LTUErrorNum.RVS1) && (LTUErrorNum.IdleRVS2 == LTUErrorNum.RVS2))
+   {
+
+       if(((Flg.ZT7 & 0x40) == 0x40)&& (RVS.R5Flg == 1) && (RVS.TmpFlg[1] == 1))
+       {
+        tm = RVS.R4R5Time;
+        rm = RVS.RmR5;
+        NumZT7 = 0x40;
+        tmpwh = RVS.Wh2[0];
+        tmphh = RVS.Hh2[0];
+        tmpwhv = RVS.Wh2[1];
+        tmphhv = RVS.Hh2[1];
+        for (i = 0; i < 3; i++)
+        {
+      uRB[i] = RVS.URB5[i];
+        }
+        tmpFlg2 = 1;
+     RangingCorrection(tm, rm, tmpwh, tmphh, tmpwhv, tmphhv, dqlast2, NumZT7, uRB, tmphvq);
+     tmpdH2 = tmphvq[0];
+     tmpdVer2 = tmphvq[1];
+     dqu2 = tmphvq[2];
+     RVS.dquRR5 = dqu2;
+       }
+   }
+  }
+ }
+
+
+ if(((Flg.BZ7 & 0x3) != 0) && ((Flg.BZ7 & 0x60) != 0))
+ {
+  tmpB1 = 0.7f;
+  tmpB2 = 0.3f;
+ }
+ else if((Flg.BZ7 & 0x3) != 0)
+ {
+  tmpB1 = 1.0f;
+  tmpB2 = 0.0f;
+ }
+ else if((Flg.BZ7 & 0x60) != 0)
+ {
+  tmpB1 = 0.0f;
+  tmpB2 = 1.0f;
+ }
+ else
+ {
+  tmpB1 = 0.0f;
+  tmpB2 = 0.0f;
+ }
+
+
+ tmp = tmpB1 * tmpdH1 + tmpB2 * tmpdH2;
+ for(i = 0; i < 3; i++)
+ {
+  tmpR[i] = (float)Land.RI[i];
+ }
+ DivNorm(tmpR, 3);
+ for(i = 0; i < 3; i++)
+ {
+  Land.RI[i] = Land.RI[i] + tmp * tmpR[i];
+  tmpR[i] = (float)Land.RI[i];
+ }
+ LG(Lunar.gI, tmpR);
+ if(tmpFlg1 == 1)
+ {
+  dqlast1 = dqu1 - tmp;
+ }
+ if(tmpFlg2 == 1)
+ {
+  dqlast2 = dqu2 - tmp;
+ }
+
+
+ if((Flg.REVUFlag == 1) && ((Flg.BZ7 & 0x63) != 0))
+ {
+  tmpFlg3 = 1;
+ }
+ dVp6 = tmpB1 * tmpdVer1 + tmpB2 * tmpdVer2;
+ dVpp6 = dVp6;
+
+ for(i = 0; i < 3; i++)
+ {
+  tmpR[i] = (float)Land.RI[i];
+ }
+ DivNorm(tmpR, 3);
+ MatrixMulti(RVS.UVB6, Atti.CBI[0], tmpR, 3, 3, 1);
+ for(i = 0; i < 3; i++)
+ {
+  RVS.UVB6[i] = -RVS.UVB6[i];
+ }
+
+
+ if(Flg.VFlag == 1)
+    {
+  if((LTUErrorNum.IdleRVS1 == LTUErrorNum.RVS1) && (LTUErrorNum.IdleRVS2 == LTUErrorNum.RVS2))
+  {
+
+   if(((Flg.ZT7 & 0x4) == 0x4) && (RVS.DataFlg[0] == 1) && (RVS.TmpFlg[0] == 1))
+      {
+       tm = RVS.Time;
+       vm = RVS.Rate[0];
+       tmpw = RVS.Wv1;
+       tmpvc = RVS.Vv1;
+    for (i = 0; i < 3; i++)
+    {
+     uVB[i] = RVS.UVB1[i];
+    }
+    NumZT7 = 0x4;
+    dVp1 = VelocityCorrection(tm, vm, tmpw, tmpvc, NumZT7, uVB);
+    if((Flg.BZ7 & 0x4) == 0x4)
+    {
+     TkCount.NumVp1y++;
+     TkCount.NumVp1n = 0;
+    }
+    else
+    {
+     TkCount.NumVp1y = 0;
+     TkCount.NumVp1n++;
+     dVp1 = 0.0f;
+    }
+      }
+
+      if(((Flg.ZT7 & 0x8) == 0x8) && (RVS.DataFlg[1] == 1) && (RVS.TmpFlg[0] == 1))
+      {
+       tm = RVS.Time;
+       vm = RVS.Rate[1];
+       tmpw = RVS.Wv2;
+       tmpvc = RVS.Vv2;
+    for (i = 0; i < 3; i++)
+    {
+     uVB[i] = RVS.UVB2[i];
+    }
+    NumZT7 = 0x8;
+    dVp2 = VelocityCorrection(tm, vm, tmpw, tmpvc, NumZT7, uVB);
+    if((Flg.BZ7 & 0x8) == 0x8)
+    {
+     TkCount.NumVp2y++;
+     TkCount.NumVp2n = 0;
+    }
+    else
+    {
+     TkCount.NumVp2y = 0;
+     TkCount.NumVp2n++;
+     dVp2 = 0.0f;
+    }
+      }
+
+      if(((Flg.ZT7 & 0x10) == 0x10) && (RVS.DataFlg[2] == 1) && (RVS.TmpFlg[0] == 1))
+      {
+       tm = RVS.Time;
+       vm = RVS.Rate[2];
+       tmpw = RVS.Wv3;
+       tmpvc = RVS.Vv3;
+    for (i = 0; i < 3; i++)
+    {
+     uVB[i] = RVS.UVB3[i];
+    }
+    NumZT7 = 0x10;
+    dVp3 = VelocityCorrection(tm, vm, tmpw, tmpvc, NumZT7, uVB);
+    if((Flg.BZ7 & 0x10) == 0x10)
+    {
+     TkCount.NumVp3y++;
+     TkCount.NumVp3n = 0;
+    }
+    else
+    {
+     TkCount.NumVp3y = 0;
+     TkCount.NumVp3n++;
+     dVp3 = 0.0f;
+    }
+      }
+     }
+    }
+    if(Flg.VFlag5 == 1)
+    {
+     if((LTUErrorNum.IdleRVS1 == LTUErrorNum.RVS1) && (LTUErrorNum.IdleRVS2 == LTUErrorNum.RVS2))
+     {
+
+      if(((Flg.ZT7 & 0x80) == 0x80) && (RVS.V5Flg == 1) && (RVS.TmpFlg[1] == 1))
+      {
+       tm = RVS.R4R5Time;
+       vm = RVS.VmR5;
+       tmpw = RVS.Wv5;
+       tmpvc = RVS.Vv5;
+    for (i = 0; i < 3; i++)
+    {
+     uVB[i] = RVS.UVB5[i];
+    }
+    NumZT7 = 0x80;
+    dVp5 = VelocityCorrection(tm, vm, tmpw, tmpvc, NumZT7, uVB);
+    if((Flg.BZ7 & 0x80) == 0x80)
+    {
+     TkCount.NumVp5y++;
+     TkCount.NumVp5n = 0;
+    }
+    else
+    {
+     TkCount.NumVp5y = 0;
+     TkCount.NumVp5n++;
+     dVp5 = 0.0f;
+    }
+      }
+     }
+    }
+
+
+    for(i = 0; i < 3; i++)
+    {
+     dVgb[i] = 0.0f;
+    }
+    tmpSumNum = 0;
+
+    for(i = 0; i < 8; i++)
+    {
+     if(((Flg.BZ7 >> i) & 0x1) == 0x1)
+     {
+      if(i == 2)
+      {
+       for(j = 0; j < 3; j++)
+       {
+        tmp43[tmpSumNum][j] = RVS.UVB1[j];
+       }
+       tmp4[tmpSumNum] = dVp1;
+       tmpSumNum++;
+      }
+      if(i == 3)
+      {
+       for(j = 0; j < 3; j++)
+       {
+        tmp43[tmpSumNum][j] = RVS.UVB2[j];
+       }
+       tmp4[tmpSumNum] = dVp2;
+       tmpSumNum++;
+
+      }
+      if(i == 4)
+      {
+       for(j = 0; j < 3; j++)
+       {
+        tmp43[tmpSumNum][j] = RVS.UVB3[j];
+       }
+       tmp4[tmpSumNum] = dVp3;
+       tmpSumNum++;
+      }
+      if(i == 7)
+      {
+       for(j = 0; j < 3; j++)
+       {
+        tmp43[tmpSumNum][j] = RVS.UVB5[j];
+       }
+       tmp4[tmpSumNum] = dVp5;
+       tmpSumNum++;
+      }
+     }
+    }
+
+    for(i = 0; i < 3; i++){
+
+     for(j = 0; j < 3; j++)
+     {
+      tmp33[i][j] = tmp43[i][j];
+     }
+     tmp3[i] = tmp4[i];
+    }
+    if((tmpSumNum == 3) || (tmpSumNum == 4))
+    {
+  MatrixInv33(Invtmp33[0], tmp33[0]);
+     MatrixMulti(dVgb, Invtmp33[0], tmp3, 3, 3, 1);
+    }
+
+    if(tmpSumNum == 2)
+    {
+     if(tmpFlg3 == 1)
+     {
+      for(i = 0; i < 3; i++)
+      {
+       tmpA[i] = tmp43[0][i];
+       tmpB[i] = tmp43[1][i];
+      }
+      tmpacos1 = (float)(VectorDot3D(tmpA, RVS.UVB6) / Norm(tmpA, 3) / Norm(RVS.UVB6, 3));
+      tmpacos2 = (float)(VectorDot3D(tmpB, RVS.UVB6) / Norm(tmpB, 3) / Norm(RVS.UVB6, 3));
+      if(fabs(tmpacos1) <= 1.0)
+      {
+       tmpacos1 = (float)acos(tmpacos1);
+      }
+      else if(tmpacos1 > 1.0f)
+      {
+       tmpacos1 = (float)acos(1.0);
+      }
+      else
+      {
+       tmpacos1 = (float)acos(-1.0);
+      }
+      if(fabs(tmpacos2) <= 1.0)
+      {
+       tmpacos2 = (float)acos(tmpacos2);
+      }
+      else if(tmpacos2 > 1.0f)
+      {
+       tmpacos2 = (float)acos(1.0);
+      }
+      else
+      {
+       tmpacos2 = (float)acos(-1.0);
+      }
+
+      if((tmpacos1 >= (1.0f / 57.295779f)) && (tmpacos2 >= (1.0f / 57.295779f)))
+      {
+       for(i = 0; i < 3; i++)
+       {
+        tmp33[2][i] = RVS.UVB6[i];
+       }
+       tmp3[2] = dVp6;
+       MatrixMulti(dVgb, tmp33[0], tmp3, 3, 3, 1);
+       tmpFlg = 0;
+      }
+     }
+
+  if(tmpFlg == 1)
+  {
+      tmpFlag1 = 1;
+      for(i = 0; i < 2; i++)
+      {
+       for(j = 0; j < 3; j++)
+       {
+        tmp23[i][j] = tmp43[i][j];
+       }
+       tmp2[i] = tmp4[i];
+      }
+  }
+    }
+
+    if(tmpSumNum == 1)
+    {
+     if(tmpFlg3 == 1)
+     {
+      for(i = 0; i < 3; i++)
+      {
+       tmpA[i] = tmp43[0][i];
+      }
+      tmpacos1 = (float)(VectorDot3D(tmpA, RVS.UVB6) / Norm(tmpA, 3) / Norm(RVS.UVB6, 3));
+
+      if(fabs(tmpacos1) <= 1.0)
+      {
+       tmpacos1 = (float)acos(tmpacos1);
+      }
+      else if(tmpacos1 > 1.0f)
+      {
+       tmpacos1 = (float)acos(1.0);
+      }
+      else
+      {
+       tmpacos1 = (float)acos(-1.0);
+      }
+
+      if(tmpacos1 > (1.0f / 57.295779f))
+      {
+       tmpFlag2 = 1;
+       for(i = 0; i < 3; i++)
+       {
+        tmp23[0][i] = tmp43[0][i];
+        tmp23[1][i] = RVS.UVB6[i];
+       }
+       tmp2[0] = tmp4[0];
+       tmp2[1] = dVp6;
+      }
+      else
+      {
+       tmppFlag2 = 1;
+       for(i = 0; i < 3; i++)
+       {
+        tmp13[i] = tmp43[0][i];
+       }
+       tmp1 = tmp4[0];
+      }
+     }
+     else
+     {
+      tmppFlag1 = 1;
+      for(i = 0; i < 3; i++)
+      {
+       tmp13[i] = tmp43[0][i];
+      }
+      tmp1 = tmp4[0];
+     }
+
+    }
+    if(tmpSumNum == 0)
+    {
+     if(tmpFlg3 == 1)
+     {
+      tmppFlag3 = 1;
+      for(i = 0; i < 3; i++)
+      {
+       tmp13[i] = RVS.UVB6[i];
+      }
+      tmp1 = dVp6;
+     }
+    }
+
+    if((tmpFlag1 == 1) || (tmpFlag2 == 1))
+    {
+     tmp = 0.0f;
+     for(i = 0; i < 3; i++)
+     {
+      tmp = tmp + tmp23[0][i] * tmp23[1][i];
+      tmpA[i] = tmp23[0][i];
+      tmpB[i] = tmp23[1][i];
+     }
+     if(fabs(tmp) <= 1.0)
+     {
+      tmp = (float)acos(tmp);
+     }
+     else if(tmp > 1.0f)
+     {
+      tmp = (float)acos(1.0);
+     }
+     else
+     {
+      tmp = (float)acos(-1.0);
+     }
+
+     tmpB1 = (float)(-cos(tmp)*tmp2[0]/sin(tmp) + tmp2[1]/sin(tmp));
+     VectorCross3D(tmpR, tmpA, tmpB);
+     DivNorm(tmpR, 3);
+     VectorCross3D(tmpB, tmpR, tmpA);
+     for(i = 0; i < 3; i++)
+     {
+      dVgb[i] = tmp2[0] * tmpA[i] + tmpB1 * tmpB[i];
+     }
+    }
+
+    if((tmppFlag1 == 1) || (tmppFlag2 == 1) || (tmppFlag3 == 1))
+    {
+     for(i = 0; i < 3; i++)
+     {
+      dVgb[i] = tmp1 * tmp13[i];
+     }
+    }
+
+
+    for(i = 0; i < 3; i++)
+    {
+     MatrixMulti(tmpXI, Atti.CIB[0], dVgb, 3, 3, 1);
+     Land.VI[i] = Land.VI[i] + tmpXI[i];
+    }
+    return;
+}
+
+float fmax(float a, float b)
+{
+    if (a > b)
+    {
+        return a;
+    }
+    else
+    {
+        return b;
+    }
+}
+
+float fmin(float a, float b)
+{
+    if (a > b)
+    {
+        return b;
+    }
+    else
+    {
+        return a;
+    }
+}
+
+float arctan2(float y,float x)
+{
+    if(fabs(x) <= 1.0e-7f)
+    {
+        if(fabs(y) <= 1.0e-7f)
+        {
+            return 1.0e-7f;
+        }
+        else if(y > 1.0e-7f)
+        {
+            return 1.5707963f;
+        }
+        else
+        {
+            return -1.5707963f;
+        }
+    }
+    else if(x > 1.0e-7f)
+    {
+        if(y >= 1.0e-7f)
+        {
+            return ((float)atan(y/x));
+        }
+        else
+        {
+            return (-(float)atan(-y/x));
+        }
+    }
+    else
+    {
+        if(y >= 1.0e-7f)
+        {
+            return (3.1415927f - (float)atan(y/(-x)));
+        }
+        else
+        {
+            return (-3.1415927f + (float)atan((-y)/(-x)));
+        }
+    }
+}
+
+float Sgn(float x)
+{
+    if(fabs(x) <= 1.0e-7f)
+    {
+        return 0.0f;
+    }
+    else if(x < -1.0e-7f)
+    {
+        return -1.0f;
+    }
+    else
+    {
+        return 1.0f;
+    }
+}
+
+void Qa(float *cc, float *b)
+{
+ float x, y, z, tmp, tmpp, tmp1;
+    unsigned int i,j;
+    float aa[3][3];
+
+    for (i = 0; i < 3; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            aa[i][j] = cc[i * 3 + j];
+        }
+    }
+    x = 1.0f + aa[0][0] + aa[1][1] + aa[2][2];
+    y = 1.0f - aa[0][0] + aa[1][1] - aa[2][2];
+    z = 1.0f + aa[0][0] - aa[1][1] - aa[2][2];
+
+    if (x >= 0.004f)
+    {
+        b[3] = (float)(sqrt(x) / 2.0f);
+        tmp = 4.0f * b[3];
+        b[0] = (aa[1][2] - aa[2][1]) / tmp;
+        b[1] = (aa[2][0] - aa[0][2]) / tmp;
+        b[2] = (aa[0][1] - aa[1][0]) / tmp;
+    }
+
+    else if (y >= 0.004f)
+    {
+        tmp = Sgn(aa[2][0] - aa[0][2]);
+        tmpp = (float)fabs(tmp);
+        if(tmpp < 1.0e-7f)
+        {
+            tmp = 1.0f;
+        }
+        b[1] = (float)(sqrt(y) / 2.0f * tmp);
+        tmp = 4.0f * b[1];
+        b[0] = (aa[1][0] + aa[0][1]) / tmp;
+        b[2] = (aa[2][1] + aa[1][2]) / tmp;
+        b[3] = (aa[2][0] - aa[0][2]) / tmp;
+    }
+
+    else if (z >= 0.004f)
+    {
+        tmp = Sgn(aa[1][2] - aa[2][1]);
+        tmpp = (float)fabs(tmp);
+        if(tmpp < 1.0e-7f)
+        {
+            tmp = 1.0f;
+        }
+        b[0] = (float)(sqrt(z) / 2.0f * tmp);
+        tmp = 4.0f * b[0];
+        b[1] = (aa[1][0] + aa[0][1]) / tmp;
+        b[2] = (aa[0][2] + aa[2][0]) / tmp;
+        b[3] = (aa[1][2] - aa[2][1]) / tmp;
+    }
+
+    else
+    {
+        tmp = Sgn(aa[0][1]-aa[1][0]);
+        tmpp = (float)fabs(tmp);
+        if(tmpp < 1.0e-7f)
+        {
+            tmp = 1.0f;
+        }
+        tmp1 = 1.0f-aa[0][0]-aa[1][1]+aa[2][2];
+        if(tmp1 < 3.988f)
+        {
+            tmp1 = 3.988f;
+        }
+        b[2] = (float)(sqrt(tmp1) / 2.0f * tmp);
+        tmp = 4.0f * b[2];
+        b[0] = (aa[0][2] + aa[2][0]) / tmp;
+        b[1] = (aa[1][2] + aa[2][1]) / tmp;
+        b[3] = (aa[0][1] - aa[1][0]) / tmp;
+    }
+    return;
+}
+
+void Qim(float *b, float *c, float *a )
+{
+    a[0] = -b[0]*c[3] - b[1]*c[2] + b[2]*c[1] + b[3]*c[0];
+    a[1] = b[0]*c[2] - b[1]*c[3] - b[2]*c[0] + b[3]*c[1];
+    a[2] = -b[0]*c[1] + b[1]*c[0] - b[2]*c[3] + b[3]*c[2];
+    a[3] = b[0]*c[0] + b[1]*c[1] + b[2]*c[2] + b[3]*c[3];
+    return;
+}
+
+void Eq(float *b,float *aa)
+{
+    aa[0] = b[3];
+    aa[1] = -b[2];
+    aa[2] = b[1];
+
+    aa[3] = b[2];
+    aa[4] = b[3];
+    aa[5] = -b[0];
+
+    aa[6] = -b[1];
+    aa[7] = b[0];
+    aa[8] = b[3];
+
+    aa[9] = -b[0];
+    aa[10] = -b[1];
+    aa[11] = -b[2];
+    return;
+}
+
+void RangingCorrection(double tm, float Rm, float wh, float hh, float whv, float hhv, float dqlast, unsigned int NumZT7, float *urb, float *hvq)
+{
+ unsigned int i;
+    float tmprm[3], tmpA[3];
+    float tmpF, qu, qu1;
+
+ tmpF = 0.0f;
+
+ for(i = 0; i < 3; i++)
+ {
+  hvq[i] = 0.0f;
+ }
+
+
+ for (i = 0; i < 3; i++)
+ {
+  tmprm[i] = (float)(Land.RIn1[i] + (tm - Time.Orbit + DeltaT) * Land.dRIN[i] / DeltaT);
+ }
+
+
+ qu = (float)Norm(tmprm,3) - Lunar.rM;
+    DivNorm(tmprm,3);
+ MatrixMulti(tmpA, Atti.CIB[0], urb, 3, 3, 1);
+ qu1 = Rm * (-VectorDot3D(tmpA, tmprm));
+ hvq[2] = qu1 - qu;
+
+
+
+    if((NumZT7 & 0x3) != 0)
+    {
+     tmpF = (float)(LRF.qHC + LRF.wHC * fabs(qu));
+    }
+    if((NumZT7 & 0x60) != 0)
+    {
+     tmpF = (float)(RVS.qHC + RVS.wHC * fabs(qu));
+    }
+
+ if(fabs(hvq[2] - dqlast) < tmpF)
+ {
+  hvq[0] = wh * hvq[2]/ (hh + fmax(Self.H, 0.0f));
+  hvq[1] = whv * hvq[2] / (hhv + fmax(Self.H, 0.0f));
+  Flg.BZ7 = Flg.BZ7 | NumZT7;
+ }
+    return;
+}
+
+float VelocityCorrection(double tm, float Vm, float wV, float vV, unsigned int NumZT7, float *uvb)
+{
+ unsigned int i;
+    float tmpvm[3], tmpA[3], tmpB[3];
+    float dvp, tmp, qu, dqu, qVC, wVC;
+    float temp, tmpRI[3];
+
+ OS_Hook(0x2A);
+
+ dvp = 0.0f;
+ qVC = 0.0f;
+ wVC = 0.0f;
+
+
+ for (i = 0; i < 3; i++)
+ {
+  tmpvm[i] = (float)(Land.VIn1[i] + (tm - Time.Orbit + DeltaT) * Land.dVIN[i] / DeltaT);
+ }
+
+
+ for (i = 0; i < 3; i++)
+ {
+  tmpA[i] = Lunar.wMI[i] * Lunar.wM;
+  tmpRI[i] = (float)Land.RI[i];
+ }
+    VectorCross3D(tmpB, tmpA, tmpRI);
+ for (i = 0; i < 3; i++)
+ {
+  tmpvm[i] = tmpvm[i] - tmpB[i];
+ }
+ MatrixMulti(tmpA, Atti.CIB[0], uvb, 3, 3, 1);
+ qu = VectorDot3D(tmpvm, tmpA);
+ dqu = Vm - qu;
+
+ if(NumZT7 == 0x4)
+ {
+  if((TkCount.NumVp1n >= 20) || (TkCount.NumVp1y <= 20))
+  {
+   qVC = RVS.qVC1;
+   wVC = RVS.wVC1;
+  }
+  else
+  {
+   qVC = RVS.qVC2;
+   wVC = RVS.wVC2;
+  }
+  RVS.dquVR1 = dqu;
+ }
+ if(NumZT7 == 0x8)
+ {
+  if((TkCount.NumVp2n >= 20) || (TkCount.NumVp2y <= 20))
+  {
+   qVC = RVS.qVC1;
+   wVC = RVS.wVC1;
+  }
+  else
+  {
+   qVC = RVS.qVC2;
+   wVC = RVS.wVC2;
+  }
+  RVS.dquVR2 = dqu;
+ }
+ if(NumZT7 == 0x10)
+ {
+  if((TkCount.NumVp3n >= 20) || (TkCount.NumVp3y <= 20))
+  {
+   qVC = RVS.qVC1;
+   wVC = RVS.wVC1;
+  }
+  else
+  {
+   qVC = RVS.qVC2;
+   wVC = RVS.wVC2;
+  }
+  RVS.dquVR3 = dqu;
+ }
+ if(NumZT7 == 0x80)
+ {
+  if((TkCount.NumVp5n >= 20) || (TkCount.NumVp5y <= 20))
+  {
+   qVC = RVS.qVC1;
+   wVC = RVS.wVC1;
+  }
+  else
+  {
+   qVC = RVS.qVC2;
+   wVC = RVS.wVC2;
+  }
+  RVS.dquVR5 = dqu;
+ }
+
+
+    tmp = (float)(qVC + wVC * fabs(qu));
+ if(fabs(dqu) < tmp)
+ {
+  temp = wV * (1.0f - ((float)Norm(Land.VBI,3)/vV));
+  temp = fmax(fmin(temp, 1.0f), 0.0f);
+  dvp = temp * dqu;
+  Flg.BZ7 = Flg.BZ7 | NumZT7;
+ }
+    return dvp;
+}
+
+float VectorDot3D(const float* vax, const float* vby)
+{
+    return (vax[0] * vby[0] + vax[1] * vby[1] + vax[2] * vby[2]);
+}
